@@ -10,7 +10,15 @@ const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
+  },  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
   },
+  {
+    path: 'chats',
+    loadChildren: () => import('./chats/chats.module').then( m => m.ChatsPageModule)
+  },
+
 ];
 
 @NgModule({
