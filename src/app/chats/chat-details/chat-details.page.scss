@@ -35,14 +35,8 @@
   background: rgb(255, 255, 255);
 }
 
-ion-toolbar {
-  --background-color: transparent;
-  --ion-color-base: transparent !important;
-}
-
 ion-content{
   --background: url(../../../assets/images/chat-background.webp);
   --background-repeat: no-repeat;
   --background-size: cover;
-
 }
