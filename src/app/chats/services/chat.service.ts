@@ -20,6 +20,34 @@ export class ChatService {
             from:'Naif',
             to:'mohammed',
             created:new Date().toDateString()
+          },
+          {
+            id:'conversation1',
+            text:'Hi Naif',
+            from:'mohammed',
+            to:'Naif',
+            created:new Date().toDateString()
+          },
+          {
+            id:'conversation1',
+            text:'How are you Naif we miss you so much i hope ypu fine?',
+            from:'mohammed',
+            to:'Naif',
+            created:new Date().toDateString()
+          },
+          {
+            id:'conversation1',
+            text:'Thank you so much Mohammed for asking about me i am fine what about you and your family',
+            from:'Naif',
+            to:'mohammed',
+            created:new Date().toDateString()
+          },
+          {
+            id:'conversation1',
+            text:'Hi mohammed',
+            from:'Naif',
+            to:'mohammed',
+            created:new Date().toDateString()
           }
         ]
     },

@@ -1,5 +1,4 @@
-
-.item-input-chat{
+.item-input-chat {
   border-radius: 10px !important;
   border: 1px solid rgb(69, 211, 236);
   padding-left: 2px;
@@ -7,7 +6,43 @@
 .div-ion-buttons {
   display: flex;
   justify-content: right;
-
 }
 
+.created-time {
+  font-size: 10px;
+  margin-left: auto;
+}
 
+.sent-by {
+  font-size: 10px;
+  padding-right: 5px;
+  font-weight: bold;
+  color: rgb(58, 45, 45);
+}
+
+.chat-box {
+  border-radius: 10px !important;
+  background-color: rgba(164, 214, 230, 0.90);
+  opacity: 2;
+}
+.line {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: rgb(97, 92, 92);
+}
+
+.footer-class {
+  background: rgb(255, 255, 255);
+}
+
+ion-toolbar {
+  --background-color: transparent;
+  --ion-color-base: transparent !important;
+}
+
+ion-content{
+  --background: url(../../../assets/images/chat-background.webp);
+  --background-repeat: no-repeat;
+  --background-size: cover;
+
+}
