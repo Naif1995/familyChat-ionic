@@ -1,9 +1,32 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
     <ion-title>chats</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-</ion-content>
+  <ion-grid>
+  <ion-row>
+    <ion-col size="12" size-sm="8" offset-sm="2" class="ion-text-center">
+      <ion-list>
+        <ion-item
+          *ngFor="let chat of chats"
+          [routerLink]="['/', 'chats', 'chat-details', chat.id]"
+          detail
+        >
+          <ion-thumbnail slot="start">
+            <ion-img [src]="chat.imageUrl"></ion-img>
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ chat.title }}</h2>
+            <p>{{ chat.describtion }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  </ion-grid>
+  </ion-content>

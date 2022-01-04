@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatService } from './services/chat.service';
 
 @Component({
   selector: 'app-chats',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chats.page.scss'],
 })
 export class ChatsPage implements OnInit {
-
-  constructor() { }
+  chats;
+  constructor(private chatService: ChatService) {}
 
   ngOnInit() {
+    this.chats = this.chatService.chats;
   }
 
 }

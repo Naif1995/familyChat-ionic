@@ -1,9 +1,57 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>chat-details</ion-title>
+    <ion-title>
+      Private Chat Room
+    </ion-title>
   </ion-toolbar>
 </ion-header>
+<ion-content fullscreen>
+  <ion-grid>
+    <ion-row *ngFor="let message of chat.conversation">
 
-<ion-content>
+    </ion-row>
+    <!-- <ion-row >
+      <ion-col size="6">
+        <ion-item>
+          <ion-textarea rows="4" cols="20" placeholder="Enter any notes here..."></ion-textarea>
+        </ion-item>
+      </ion-col>
+      <ion-col   class="ion-align-items-end" >
+        <div class="send-div">
+          <ion-buttons slot="end">
+            <ion-button  icon-only color="medium"><ion-icon name="send-outline"></ion-icon></ion-button>
+          </ion-buttons>
+        </div>
 
+      </ion-col>
+
+    </ion-row> -->
+
+
+
+
+
+
+  </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-grid>
+  <ion-row >
+    <ion-col size="10" class="col-input">
+      <div>
+          <ion-input class="item-input-chat" placeholder="   type..." ></ion-input>
+      </div>
+    </ion-col>
+    <ion-col class="ion-align-self-center">
+      <div class="div-ion-buttons">
+        <ion-buttons >
+          <ion-button autocomplete="on"   icon-only color="secondary"><ion-icon name="send-outline"></ion-icon></ion-button>
+        </ion-buttons
+        ></div>
+    </ion-col>
+  </ion-row>
+  </ion-grid>
+</ion-footer>
+
+
