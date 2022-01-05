@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-create-chat',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateChatPage implements OnInit {
 
-  constructor() { }
+  @Input()root;
+
+  constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
+    console.log(this.root);
+  }
+
+  colseCreateChatModal() {
+    this.modalCtrl.dismiss(null, 'cancel');
+
   }
 
 }
