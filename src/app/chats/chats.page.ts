@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonRouterOutlet, ModalController } from '@ionic/angular';
 import { CreateChatPage } from './create-chat/create-chat.page';
 import { ChatService } from './services/chat.service';
@@ -10,18 +11,24 @@ import { ChatService } from './services/chat.service';
 })
 export class ChatsPage implements OnInit {
   chats;
+  user: any;
+
   constructor(private chatService: ChatService,
     private modalCtrl: ModalController,
-    private routerOutlet: IonRouterOutlet) {}
+    private routerOutlet: IonRouterOutlet,private route: ActivatedRoute,
+    private router: Router) {}
 
   ngOnInit() {
     this.chats = this.chatService.chats;
+    this.route.queryParams.subscribe(params => {
+      const data = this.router.getCurrentNavigation().extras.state;
+      if (data.user) {
+          this.user = data.user;
+      }
+    });
   }
 
 openCreateChatModal() {
-  // this.router.navigateByUrl('/places/tabs/discover');
-  // this.navCtrl.navigateBack('/places/tabs/discover');
-  // this.navCtrl.pop();
   this.modalCtrl
   .create({
     component: CreateChatPage,

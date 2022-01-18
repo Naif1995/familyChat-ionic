@@ -24,7 +24,51 @@ export class ChatService {
           {
             id:'conversation1',
             text:'Hi Naif',
+            from:'mohammedssssssssssssss',
+            to:'Naif',
+            created:new Date().toDateString()
+          },
+          {
+            id:'conversation1',
+            text:'How are you Naif we miss you so much i hope ypu fine?',
             from:'mohammed',
+            to:'Naif',
+            created:new Date().toDateString()
+          },
+          {
+            id:'conversation1',
+            text:'Thank you so much Mohammed for asking about me i am fine what about you and your family',
+            from:'Naif',
+            to:'mohammed',
+            created:new Date().toDateString()
+          },
+          {
+            id:'conversation1',
+            text:'Hi mohammed',
+            from:'Naif',
+            to:'mohammed',
+            created:new Date().toDateString()
+          }
+        ]
+    },
+    {
+      id: 'c2',
+      description: 'Chat 2',
+      title: 'chat 2',
+      imageUrl:
+        'https://thumbs.dreamstime.com/z/gorgeous-frangipani-flowers-6647154.jpg',
+        conversation:[
+          {
+            id:'conversation1',
+            text:'Hi mohammed',
+            from:'Naif',
+            to:'mohammed',
+            created:new Date().toDateString()
+          },
+          {
+            id:'conversation1',
+            text:'Hi Naif',
+            from:'mohammedssssssssssssss',
             to:'Naif',
             created:new Date().toDateString()
           },

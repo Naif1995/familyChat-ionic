@@ -1,7 +1,7 @@
 .item-input-chat {
-  border-radius: 10px !important;
-  border: 1px solid rgb(69, 211, 236);
-  padding-left: 2px;
+  // border-radius: 10px !important;
+  // border: 3px solid rgb(169, 208, 214);
+    --padding-start:10px;
 }
 .div-ion-buttons {
   display: flex;
@@ -25,7 +25,7 @@
 }
 
 .chat-box {
-  border-radius: 10px !important;
+  // border-radius: 10px !important;
   background-color: rgba(164, 214, 230, 0.90);
   opacity: 2;
 }
@@ -35,12 +35,59 @@
   background: rgb(97, 92, 92);
 }
 
+.ion-row-message-details {
+  // opacity: 0.5;
+
+}
+
 .footer-class {
   background: rgb(255, 255, 255);
+  padding: auto;
 }
 
 ion-content{
   --background: url(../../../assets/images/chat-background.webp);
   --background-repeat: no-repeat;
   --background-size: cover;
+}
+ion-title {
+  color: rgb(251, 251, 251);
+  // font: italic small-caps bold 16px/2 cursive;
+  font-size: 45px;
+  text-shadow: 4px 3px 5px #000000;
+  font-family: 'Amiri', serif;
+  }
+
+//   ion-avatar{
+//     margin-right: 10px;
+// //     width:50% !important;
+// // height : 50% !important;
+// max-width: 75px !important;  //any size
+// max-height: 40px !important; //any size
+// --border-radius:50px
+// }
+  ion-buttons {
+    --color-hover	:red;
+    cursor: pointer;
+  }
+
+  .ion-thumbnail-photo {
+    margin-right: 10px;
+    --size:40px;
+    border: solid;
+    border-color:  rgb(94, 203, 223);
+    //     width:50% !important;
+    // height : 50% !important;
+    // max-width: 75px !important;  //any size
+    // max-height: 40px !important; //any size
+  //   --border-radius:70px;
+  }
+
+  ion-toolbar {
+    background-color: blanchedalmond;;
+  }
+
+  .my-custom-class {
+    --backdrop-opacity: 0.2;
+    --background: linear-gradient(90deg, rgba(165, 255, 192, 1) 1%, rgba(0, 212, 255, 1) 100%);
 }

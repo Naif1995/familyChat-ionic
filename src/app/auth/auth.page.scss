@@ -1,0 +1,33 @@
+ion-content{
+  --background: url(../../assets/images/photo-1503327431567-3ab5e6e79140.jpg) no-repeat center/cover fixed;
+  // background-position: center center;
+  // background-repeat: no-repeat;
+  // background-size: cover;
+}
+
+.item-login-input {
+  opacity: 0.5;
+
+}
+
+ion-button {
+  --border-radius:0;
+}
+.profile-photo {
+  border-radius: 50%;
+  width: 300px;
+  height: 100px;
+      overflow: hidden;
+  }
+
+  ion-toolbar {
+    --min-height:70px;
+  }
+
+ ion-title {
+  color: rgb(251, 251, 251);
+  font: italic small-caps bold 16px/2 cursive;
+  font-size: 30px;
+  text-shadow: 4px 3px 5px #000000;
+}
+

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Chat } from '../chat';
 import { ChatService } from '../services/chat.service';
 
@@ -11,11 +11,13 @@ import { ChatService } from '../services/chat.service';
 })
 export class ChatDetailsPage implements OnInit {
   chat: Chat;
+  currentUser = 'Naif';
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private chatService: ChatService
+    private chatService: ChatService,
+    public alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -31,4 +33,20 @@ export class ChatDetailsPage implements OnInit {
   sendMessage() {
 
   }
+
+  testButtons() {
+    console.log('it works');
+  }
+  async showAlert() {
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      cssClass:'my-custom-class',
+      subHeader: 'Subtitle for alert',
+      message: 'This is an alert message.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
 }

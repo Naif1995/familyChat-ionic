@@ -1,1 +1,13 @@
-{}
+{
+
+    "appId": "com.family.chat",
+    "appName": "familyChat",
+    "webDir": "www",
+    "bundledWebRuntime": false,
+    "plugins": {
+    "GoogleAuth": {
+    "scopes": ["profile","email"],
+    "serverClientId": "233447996534-sialibjqeimq191pifenr75me86n9e24.apps.googleusercontent.com"
+    }
+    }
+}

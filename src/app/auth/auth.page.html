@@ -1,16 +1,55 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic 5 Form
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content class="auth-form">
+<ion-content fullscreen="true">
+  <ion-header collapse="condense">
+    <ion-toolbar color="translucent" >
+      <ion-title >Family Chat</ion-title>
+    </ion-toolbar>
+  </ion-header>
+<ion-content>
   <ion-grid>
+    <ion-row >
+      <ion-col >
+        <form
+          [formGroup]="validations_form"
+          (ngSubmit)="onSubmitLogin(validations_form.value)"
+        >
+          <ion-item class="item-login-input">
+            <ion-label position="floating" color="primary">Email</ion-label>
+            <ion-input type="text" formControlName="email"></ion-input>
+          </ion-item>
+
+          <ion-item class="item-login-input">
+            <ion-label position="floating" color="primary">Password</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+          </ion-item>
+          <ion-button
+            class="ion-no-margin"
+            color="primary"
+            expand="block"
+            type="submit"
+            [disabled]="!validations_form.valid"
+            >Log In</ion-button
+          >
+        </form>
+      </ion-col>
+    </ion-row>
+    <br /><br />
+
     <ion-row>
-      <ion-col align-self-center>
-        <ion-button [routerLink]="['/login']" expand="block" color="danger">Sign In WITH Google</ion-button>
+      <ion-col class="ion-text-center">
+        <div>
+          <p>
+            <a [routerLink]="['/chats']">Or new user? Create an account</a>
+          </p>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-button type="button" color="danger" expand="block" (click)="googleLogin()">
+          sign in with Google
+        </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

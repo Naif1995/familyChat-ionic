@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { Platform } from '@ionic/angular';
+import { delay } from 'rxjs/operators';
+import { AuthenticationService } from '../auth/services/authentication.service';
+import { StorageService } from '../auth/services/storage.service';
+
+const TOKEN_KEY = 'auth-token';
 
 @Component({
   selector: 'app-home',
@@ -8,44 +15,43 @@ import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-soc
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-
-  chats= [
-    { id:'c1',
-  describtion:'Chat 1',
-  title:'chat 1',
-  imageUrl:'https://thumbs.dreamstime.com/z/gorgeous-frangipani-flowers-6647154.jpg'
-}
-];
-  loginForm: FormGroup;
-  socialUser: SocialUser;
-  isLoggedin: boolean;
-
+  chats = [
+    {
+      id: 'c1',
+      describtion: 'Chat 1',
+      title: 'chat 1',
+      imageUrl:
+        'https://thumbs.dreamstime.com/z/gorgeous-frangipani-flowers-6647154.jpg',
+    },
+  ];
+  isAuthenticated = null;
   constructor(
-    private formBuilder: FormBuilder,
-    private socialAuthService: SocialAuthService
-  ) { }
+    private router: Router,
+    private authService: AuthenticationService,
+    private storage: StorageService
+  ) {}
+
   ngOnInit() {
-    this.loginForm =
-    this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
-    }
-    );
+    this.checkLoginState();
+  }
 
-
-    this.socialAuthService.authState.subscribe((user) => {
-      this.socialUser = user;
-      this.isLoggedin = (user != null);
-      console.log(this.socialUser);
+  checkLoginState() {
+    this.authService.authenticationState.subscribe((state) => {
+      if (state) {
+        this.router.navigate(['list']);
+      }
+      console.log(state);
     });
   }
 
-  loginWithGoogle(): void {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  setStorage() {
+    this.storage.set('TEST_TOKEN', 'Test token').then(() => {
+      console.log('set it correct');
+    });
   }
-
-  logOut(): void {
-    this.socialAuthService.signOut();
+  getStorage() {
+    this.storage.get('TEST_TOKEN').then(val => {
+      console.log('value is ',val);
+    });
   }
-
 }
