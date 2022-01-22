@@ -15,8 +15,8 @@
 <ion-content fullscreen="true">
   <ion-grid>
     <ion-row *ngFor="let message of chat.conversation">
-      <ion-col size="6"  [ngClass]="message.from !== currentUser ? 'ion-col-chat-box' : '' ">
-        <div class="chat-box">
+      <ion-col size="6"  [ngClass]="message.from !== user?.name ? 'chat-alignment' : '' ">
+        <div [ngClass]="message.from !== user?.name ? 'chat-background-color' : 'chat-background-color-curUser' ">
           <ion-grid>
             <ion-row class="ion-row-message-details">
               <span class="sent-by">{{message.from}}</span>

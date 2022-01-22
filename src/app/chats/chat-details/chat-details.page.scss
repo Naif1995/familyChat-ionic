@@ -20,15 +20,18 @@
   color: rgb(58, 45, 45);
 }
 
-.ion-col-chat-box {
+.chat-alignment {
   margin-left: auto;
 }
 
-.chat-box {
-  // border-radius: 10px !important;
-  background-color: rgba(164, 214, 230, 0.90);
-  opacity: 2;
+.chat-background-color {
+  background-color: rgb(255, 255, 255);
 }
+
+.chat-background-color-curUser {
+  background-color: rgb(153, 207, 207);
+}
+
 .line {
   grid-column: 1 / -1;
   height: 1px;
@@ -89,7 +92,7 @@ ion-title {
 
   }
 
-  .my-custom-class {
-    --backdrop-opacity: 0.2;
-    --background: linear-gradient(90deg, rgba(165, 255, 192, 1) 1%, rgba(0, 212, 255, 1) 100%);
-}
+//   .my-custom-class {
+//     --backdrop-opacity: 0.2;
+//     --background: linear-gradient(90deg, rgba(165, 255, 192, 1) 1%, rgba(0, 212, 255, 1) 100%);
+// }

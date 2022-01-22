@@ -18,6 +18,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { AlertService } from './services/alert.service';
 import {
   AlertController,
+  LoadingController,
   NavController,
   Platform,
   ToastController,
@@ -31,20 +32,20 @@ import { StorageService } from './services/storage.service';
 })
 export class AuthPage implements OnInit {
   validations_form: FormGroup;
-
+  loading;
   constructor(
     public formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthenticationService,
-    private navCtrl: NavController,
-    private storage: StorageService
-  ) {}
+    public loadingCtrl: LoadingController
+  ) {
+
+  }
 
   ionViewDidEnter() {
     /**
      * check login state
      */
-    this.checkLoginState();
     GoogleAuth.init();
   }
   ngOnInit() {
@@ -88,37 +89,42 @@ export class AuthPage implements OnInit {
   };
 
   onSubmitLogin(values) {
-    //this.authService.login(values);
-    //this.router.navigate(['list']); // redirect page if login is successful
     console.log(values);
   }
 
-  /**
-   * declar - check login state
-   */
-  checkLoginState() {
-    this.authService.authenticationState.subscribe((state) => {
-      if (state) {
-        // this.router.navigate(['list']);
-      }
-    });
-  }
-
   async googleLogin() {
-    const user = await GoogleAuth.signIn();
+    this.presentLoading();
+    const user = await GoogleAuth.signIn()
+    .catch((err) => {
+      this.dismissLoading();
+    });
     if (user) {
-      this.authService.setUserData(user.givenName,user.id,user.authentication.idToken);
-      //  console.log(token);
-      //console.log('authenticationState',this.authService.authenticationState.value);
+      this.dismissLoading();
+      this.authService.setUserData(
+        user.givenName,
+        user.id,
+        user.authentication.idToken
+      );
       this.router.navigateByUrl('home');
     }
   }
 
-  getStorgeValue() {
-    const TOKEN_KEY = 'auth-token';
+  presentLoading() {
+    this.loading = this.loadingCtrl.create({
+      message: 'Please wait...',
+      keyboardClose: true,
+      cssClass: 'spinner-loading',
+      backdropDismiss: true,
+      translucent: true,
+    });
+    this.loading.then((val) => {
+      val.present();
+    });
+  }
 
-    this.storage.get(TOKEN_KEY).then((val) => {
-      console.log(val);
+  dismissLoading() {
+    this.loading.then((val) => {
+      val.dismiss();
     });
   }
 }

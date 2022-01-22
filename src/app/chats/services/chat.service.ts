@@ -97,7 +97,9 @@ export class ChatService {
         ]
     },
   ];
-  constructor() {}
+  constructor() {
+
+  }
 
   get chats() {
     // eslint-disable-next-line no-underscore-dangle

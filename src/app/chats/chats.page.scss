@@ -1,4 +1,4 @@
-ion-content{
+ion-content {
   // --background: rgb(235, 212, 212);
   // background-position: center center;
   // background-repeat: no-repeat;
@@ -9,10 +9,18 @@ ion-toolbar {
   // --min-height:70px;
 }
 
-ion-title {
-color: rgb(251, 251, 251);
-font: italic small-caps bold 16px/2 cursive;
-font-size: 25px;
-text-shadow: 4px 3px 5px #000000;
+.ion-title-chat {
+  color: rgb(251, 251, 251);
+  font: italic small-caps bold 16px/2 cursive;
+  font-size: 25px;
+  text-shadow: 4px 3px 5px #000000;
 }
 
+.ion-title-user {
+  color: rgb(92, 75, 75);
+  font: italic small-caps bold 16px/2 cursive;
+  font-size: 15px;
+  text-shadow: 4px 3px 5px #000000;
+  text-align: left;
+  padding-left: 5px;
+}

@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
 import { Chat } from '../chat';
 import { ChatService } from '../services/chat.service';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChatPhotoComponent } from './chat-photo/chat-photo.component';
-
-
+import { AuthenticationService } from 'src/app/auth/services/authentication.service';
+import { User } from 'src/app/auth/services/user.module';
 
 @Component({
   selector: 'app-chat-details',
@@ -15,14 +15,15 @@ import { ChatPhotoComponent } from './chat-photo/chat-photo.component';
 })
 export class ChatDetailsPage implements OnInit {
   chat: Chat;
-  currentUser = 'Naif';
+  user: User;
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private chatService: ChatService,
     public alertController: AlertController,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit() {
@@ -33,11 +34,12 @@ export class ChatDetailsPage implements OnInit {
       }
       this.chat = this.chatService.getChat(paramMap.get('chatId'));
     });
+    this.authService.getUserData().then((user: User) => {
+      this.user = user;
+    });
   }
 
-  sendMessage() {
-
-  }
+  sendMessage() {}
 
   testButtons() {
     console.log('it works');
@@ -45,10 +47,10 @@ export class ChatDetailsPage implements OnInit {
   async showAlert() {
     const alert = await this.alertController.create({
       header: 'Alert',
-      cssClass:'my-custom-class',
+      cssClass: 'my-custom-class',
       subHeader: 'Subtitle for alert',
       message: 'This is an alert message.',
-      buttons: ['OK']
+      buttons: ['OK'],
     });
 
     await alert.present();

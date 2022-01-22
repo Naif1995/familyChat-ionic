@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonRouterOutlet, ModalController } from '@ionic/angular';
+import {
+  IonRouterOutlet,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 import { map } from 'rxjs/operators';
 import { AuthenticationService } from '../auth/services/authentication.service';
-import { StorageService } from '../auth/services/storage.service';
 import { User } from '../auth/services/user.module';
 import { CreateChatPage } from './create-chat/create-chat.page';
 import { ChatService } from './services/chat.service';
+import { SocketService } from './services/socket.service';
 
 @Component({
   selector: 'app-chats',
@@ -22,7 +26,8 @@ export class ChatsPage implements OnInit {
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private socket: SocketService
   ) {}
 
   ngOnInit() {
@@ -33,6 +38,8 @@ export class ChatsPage implements OnInit {
       });
     });
   }
+
+
 
   openCreateChatModal() {
     this.modalCtrl
