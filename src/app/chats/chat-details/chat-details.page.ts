@@ -3,6 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
 import { Chat } from '../chat';
 import { ChatService } from '../services/chat.service';
+import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { ChatPhotoComponent } from './chat-photo/chat-photo.component';
+
+
 
 @Component({
   selector: 'app-chat-details',
@@ -17,7 +21,8 @@ export class ChatDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private chatService: ChatService,
-    public alertController: AlertController
+    public alertController: AlertController,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -49,4 +54,11 @@ export class ChatDetailsPage implements OnInit {
     await alert.present();
   }
 
+  openDialog() {
+    this.dialog.open(ChatPhotoComponent, {
+      data: {
+        imageUrl: this.chat.imageUrl,
+      },
+    });
+  }
 }

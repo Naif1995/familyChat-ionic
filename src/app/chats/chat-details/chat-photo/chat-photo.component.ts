@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export interface DialogData {
+  imageUrl: string;
+}
 
 @Component({
   selector: 'app-chat-photo',
@@ -7,8 +12,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatPhotoComponent implements OnInit {
 
-  constructor() { }
+  imageUrl: string;
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
+  public dialogRef: MatDialogRef<ChatPhotoComponent>) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.data);
+    this.imageUrl = this.data.imageUrl;
+  }
+
+  closeDialog() {
+    // this.dialogRef.afterClosed().subscribe(() => console.log('close works'));
+    this.dialogRef.close();
+  }
+
 
 }

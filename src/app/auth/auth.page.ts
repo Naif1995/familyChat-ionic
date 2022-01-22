@@ -22,6 +22,7 @@ import {
   Platform,
   ToastController,
 } from '@ionic/angular';
+import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-auth',
@@ -34,7 +35,9 @@ export class AuthPage implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private navCtrl: NavController,
+    private storage: StorageService
   ) {}
 
   ionViewDidEnter() {
@@ -96,7 +99,7 @@ export class AuthPage implements OnInit {
   checkLoginState() {
     this.authService.authenticationState.subscribe((state) => {
       if (state) {
-        this.router.navigate(['list']);
+        // this.router.navigate(['list']);
       }
     });
   }
@@ -104,7 +107,18 @@ export class AuthPage implements OnInit {
   async googleLogin() {
     const user = await GoogleAuth.signIn();
     if (user) {
-      console.log(user);
+      this.authService.setUserData(user.givenName,user.id,user.authentication.idToken);
+      //  console.log(token);
+      //console.log('authenticationState',this.authService.authenticationState.value);
+      this.router.navigateByUrl('home');
     }
+  }
+
+  getStorgeValue() {
+    const TOKEN_KEY = 'auth-token';
+
+    this.storage.get(TOKEN_KEY).then((val) => {
+      console.log(val);
+    });
   }
 }

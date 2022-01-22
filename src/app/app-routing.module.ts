@@ -3,27 +3,34 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './auth/services/auth-gard.service';
 
 const routes: Routes = [
+
   {
-    path: '',
+    path: 'home',
     loadChildren: () =>
       import('./home/home.module').then((m) => m.HomePageModule),
+      canActivate: [AuthGuardService],
   },
   {
     path: 'profile',
     loadChildren: () =>
       import('./profile/profile.module').then((m) => m.ProfilePageModule),
-    canActivate: [AuthGuardService],
+      canActivate: [AuthGuardService],
   },
   {
     path: 'chats',
     loadChildren: () =>
       import('./chats/chats.module').then((m) => m.ChatsPageModule),
-    canActivate: [AuthGuardService],
+      canActivate: [AuthGuardService],
   },
   {
     path: 'login',
     loadChildren: () =>
       import('./auth/auth.module').then((m) => m.AuthPageModule),
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
+    pathMatch: 'full'
   }
 ];
 

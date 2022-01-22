@@ -53,7 +53,7 @@ ion-content{
 ion-title {
   color: rgb(251, 251, 251);
   // font: italic small-caps bold 16px/2 cursive;
-  font-size: 45px;
+  font-size: 25px;
   text-shadow: 4px 3px 5px #000000;
   font-family: 'Amiri', serif;
   }
@@ -84,7 +84,9 @@ ion-title {
   }
 
   ion-toolbar {
-    background-color: blanchedalmond;;
+    background-color: rgba(78, 40, 40, 0.8);
+    // opacity: 0.5;
+
   }
 
   .my-custom-class {

@@ -7,13 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { ChatDetailsPageRoutingModule } from './chat-details-routing.module';
 
 import { ChatDetailsPage } from './chat-details.page';
+import {MatNativeDateModule} from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ChatDetailsPageRoutingModule
+    ChatDetailsPageRoutingModule,
+    MatDialogModule
   ],
   declarations: [ChatDetailsPage]
 })

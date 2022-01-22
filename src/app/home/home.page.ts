@@ -5,7 +5,6 @@ import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Platform } from '@ionic/angular';
 import { delay } from 'rxjs/operators';
 import { AuthenticationService } from '../auth/services/authentication.service';
-import { StorageService } from '../auth/services/storage.service';
 
 const TOKEN_KEY = 'auth-token';
 
@@ -27,31 +26,10 @@ export class HomePage implements OnInit {
   isAuthenticated = null;
   constructor(
     private router: Router,
-    private authService: AuthenticationService,
-    private storage: StorageService
-  ) {}
+    private authService: AuthenticationService  ) {}
 
   ngOnInit() {
-    this.checkLoginState();
   }
 
-  checkLoginState() {
-    this.authService.authenticationState.subscribe((state) => {
-      if (state) {
-        this.router.navigate(['list']);
-      }
-      console.log(state);
-    });
-  }
 
-  setStorage() {
-    this.storage.set('TEST_TOKEN', 'Test token').then(() => {
-      console.log('set it correct');
-    });
-  }
-  getStorage() {
-    this.storage.get('TEST_TOKEN').then(val => {
-      console.log('value is ',val);
-    });
-  }
 }

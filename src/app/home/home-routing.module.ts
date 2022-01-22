@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuardService } from '../auth/services/auth-gard.service';
 import { HomePage } from './home.page';
 
 const routes: Routes = [
@@ -10,7 +11,7 @@ const routes: Routes = [
       {
         path: 'chats',
         loadChildren: () =>
-          import('../chats/chats.module').then((m) => m.ChatsPageModule),
+          import('../chats/chats.module').then((m) => m.ChatsPageModule)
       },
       {
         path: 'profile',

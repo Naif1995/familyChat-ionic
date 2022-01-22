@@ -1,6 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +12,8 @@ export class StorageService {
 
   private _storage: Storage | null = null;
 
-  constructor(private storage: Storage) {
-    this.init();
+  constructor(private storage: Storage, private platform: Platform) {
+
   }
 
   async init() {
