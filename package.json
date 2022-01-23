@@ -38,6 +38,7 @@
     "@ionic/angular": "^6.0.0",
     "@ionic/storage": "^3.0.6",
     "@ionic/storage-angular": "^3.0.6",
+    "@stomp/stompjs": "^6.1.2",
     "bootstrap": "^5.1.3",
     "cordova-plugin-googleplus": "^8.5.2",
     "firebase": "^9.6.1",
@@ -46,6 +47,7 @@
     "rxjs": "~6.6.0",
     "save": "^2.4.0",
     "socket.io-client": "^4.4.1",
+    "sockjs": "^0.3.24",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
   },

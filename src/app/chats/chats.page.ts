@@ -1,3 +1,6 @@
+/* eslint-disable space-before-function-paren */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-arrow/prefer-arrow-functions */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -20,6 +23,8 @@ import { SocketService } from './services/socket.service';
 export class ChatsPage implements OnInit {
   chats;
   user: User;
+  title = 'grokonez';
+  description = 'Angular-WebSocket Demo';
 
   constructor(
     private chatService: ChatService,
@@ -38,8 +43,6 @@ export class ChatsPage implements OnInit {
       });
     });
   }
-
-
 
   openCreateChatModal() {
     this.modalCtrl

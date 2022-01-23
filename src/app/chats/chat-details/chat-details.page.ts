@@ -7,6 +7,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChatPhotoComponent } from './chat-photo/chat-photo.component';
 import { AuthenticationService } from 'src/app/auth/services/authentication.service';
 import { User } from 'src/app/auth/services/user.module';
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-chat-details',
@@ -23,7 +24,8 @@ export class ChatDetailsPage implements OnInit {
     private chatService: ChatService,
     public alertController: AlertController,
     public dialog: MatDialog,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -37,9 +39,13 @@ export class ChatDetailsPage implements OnInit {
     this.authService.getUserData().then((user: User) => {
       this.user = user;
     });
+    this.socketService.subscribeChat(this.chat.id);
   }
 
-  sendMessage() {}
+  sendMessage() {
+    console.log(this.chat.id);
+    this.socketService.sendName(this.chat.id);
+  }
 
   testButtons() {
     console.log('it works');
