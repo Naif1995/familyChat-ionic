@@ -119,7 +119,7 @@ images: LocalFile[];
 
   sendMessage() {
     console.log(this.chatForm.get('chatText').value);
-    this.socketService.sendName(this.chat.id);
+    this.socketService.sendMessage(this.chat.id);
     this.chatForm.get('chatText').reset();
   }
 
