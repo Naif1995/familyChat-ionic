@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -9,6 +9,7 @@ import { ChatDetailsPageRoutingModule } from './chat-details-routing.module';
 import { ChatDetailsPage } from './chat-details.page';
 import {MatNativeDateModule} from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -17,7 +18,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     FormsModule,
     IonicModule,
     ChatDetailsPageRoutingModule,
-    MatDialogModule
+    ReactiveFormsModule,
+    MatDialogModule,
+    HttpClientModule
   ],
   declarations: [ChatDetailsPage]
 })
