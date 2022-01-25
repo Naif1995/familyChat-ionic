@@ -1,12 +1,12 @@
+/* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable prefer-arrow/prefer-arrow-functions */
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
-import {Client, Stomp} from '@stomp/stompjs';
+import { Client, Stomp } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
 import { Observable } from 'rxjs';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SocketService {
   socket: any;
@@ -15,13 +15,10 @@ export class SocketService {
   name: string;
   private stompClient = null;
   constructor() {
-    // this.socket = io.connect('http://localhost:3000/');
     this.connect();
+  }
 
-   }
-
-
-   setConnected(connected: boolean) {
+  setConnected(connected: boolean) {
     this.disabled = !connected;
 
     if (connected) {
@@ -30,25 +27,20 @@ export class SocketService {
   }
 
   connect() {
-    const socket = new SockJS('http://localhost:8081/socket');
+    const socket = new SockJS('https://family-chat-java-websocket.herokuapp.com/socket');//https://family-chat-java-websocket.herokuapp.com/socket
     this.stompClient = Stomp.over(socket);
 
     const _this = this;
-    this.stompClient.connect({}, function(frame: string) {
+    this.stompClient.connect( (frame: string) => {
       _this.setConnected(true);
       console.log('Connected: ' + frame);
-
-      // _this.stompClient.subscribe('/message', function(hello: any) {
-      //   console.log(hello);
-      // });
     });
   }
   subscribeChat(chatName: string) {
-    this.stompClient.subscribe('/message/'+chatName, function(hello: any) {
+    this.stompClient.subscribe('/message/' + chatName, (hello: any) => {
       console.log(hello.body);
     });
   }
-
 
   disconnect() {
     if (this.stompClient != null) {
@@ -59,14 +51,11 @@ export class SocketService {
     console.log('Disconnected!');
   }
 
-  sendName(chatName: string) {
+  sendMessage(chatName: string) {
     this.stompClient.send(
-      '/app/send/message/'+chatName,
+      '/app/send/message/' + chatName,
       {},
       JSON.stringify({ name: 'Naif' })
     );
   }
-
-
-
 }

@@ -44,7 +44,7 @@ export class ChatDetailsPage implements OnInit {
 
   sendMessage() {
     console.log(this.chat.id);
-    this.socketService.sendName(this.chat.id);
+    this.socketService.sendMessage(this.chat.id);
   }
 
   testButtons() {
