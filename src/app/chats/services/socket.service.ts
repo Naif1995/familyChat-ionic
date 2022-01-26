@@ -27,12 +27,11 @@ export class SocketService {
   }
 
   connect() {
-    const socket = new SockJS('https://family-chat-java-websocket.herokuapp.com/socket');//https://family-chat-java-websocket.herokuapp.com/socket
+    const socket = new SockJS('http://localhost:8081/socket');//https://family-chat-java-websocket.herokuapp.com/socket
     this.stompClient = Stomp.over(socket);
 
-    const _this = this;
-    this.stompClient.connect( (frame: string) => {
-      _this.setConnected(true);
+    this.stompClient.connect({}, (frame: string) => {
+      this.setConnected(true);
       console.log('Connected: ' + frame);
     });
   }
