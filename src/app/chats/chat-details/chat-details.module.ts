@@ -7,9 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { ChatDetailsPageRoutingModule } from './chat-details-routing.module';
 
 import { ChatDetailsPage } from './chat-details.page';
-import {MatNativeDateModule} from '@angular/material/core';
-import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -19,8 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
     IonicModule,
     ChatDetailsPageRoutingModule,
     ReactiveFormsModule,
-    MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule
   ],
   declarations: [ChatDetailsPage]
 })

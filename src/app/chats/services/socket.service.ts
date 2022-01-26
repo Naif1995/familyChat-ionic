@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
-import * as io from 'socket.io-client';
 import { Client, Stomp } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
 import { Observable } from 'rxjs';
@@ -13,6 +12,8 @@ export class SocketService {
   greetings: string[] = [];
   disabled = true;
   name: string;
+  connected = false;
+
   private stompClient = null;
   constructor() {
     this.connect();
@@ -26,12 +27,17 @@ export class SocketService {
     }
   }
 
+  getConnected() {
+    return this.connected;
+  }
+
   connect() {
-    const socket = new SockJS('http://localhost:8081/socket');//https://family-chat-java-websocket.herokuapp.com/socket
+    const socket = new SockJS('http://localhost:8081/socket'); //https://family-chat-java-websocket.herokuapp.com/socket
     this.stompClient = Stomp.over(socket);
 
     this.stompClient.connect({}, (frame: string) => {
       this.setConnected(true);
+      this.connected = true;
       console.log('Connected: ' + frame);
     });
   }

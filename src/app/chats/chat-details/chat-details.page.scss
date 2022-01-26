@@ -4,8 +4,16 @@
     --padding-start:10px;
 }
 .div-ion-buttons {
+  background-color: rgb(241, 235, 235);
   display: flex;
-  justify-content: right;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.send-icon {
+  padding-right: 5px;
 }
 
 .created-time {

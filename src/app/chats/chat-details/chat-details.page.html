@@ -3,21 +3,24 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/chats"></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center" >{{chat.title}}</ion-title>
+    <ion-title class="ion-text-center">{{chat.title}}</ion-title>
     <ion-buttons slot="end" (click)="openDialog()">
-    <ion-thumbnail class="ion-thumbnail-photo" >
-      <ion-img [src]="chat.imageUrl"></ion-img>
-    </ion-thumbnail>
-  </ion-buttons>
+      <ion-thumbnail class="ion-thumbnail-photo">
+        <ion-img [src]="chat.imageUrl"></ion-img>
+      </ion-thumbnail>
+    </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 <ion-content fullscreen="true">
-   <ion-grid>
-     <!--
+  <ion-grid>
     <ion-row *ngFor="let message of chat.conversation">
-      <ion-col size="6"  [ngClass]="message.from !== user?.name ? 'chat-alignment' : '' ">
-        <div [ngClass]="message.from !== user?.name ? 'chat-background-color' : 'chat-background-color-curUser' ">
+      <ion-col
+        size="6"
+        [ngClass]="message.from !== user?.name ? 'chat-alignment' : '' "
+      >
+        <div
+          [ngClass]="message.from !== user?.name ? 'chat-background-color' : 'chat-background-color-curUser' "
+        >
           <ion-grid>
             <ion-row class="ion-row-message-details">
               <span class="sent-by">{{message.from}}</span>
@@ -32,29 +35,33 @@
           </ion-grid>
         </div>
       </ion-col>
-    </ion-row> -->
-    <ion-row *ngFor="let img of images">
-
-
-<img [src]="img.data"/>
-
     </ion-row>
   </ion-grid>
 </ion-content>
 
 <ion-footer class="footer-class">
-  <ion-grid>
-    <ion-row  >
-      <ion-col size-lg="10" class="ion-no-padding" >
-          <ion-input  class="item-input-chat" placeholder=" type..."
-           [formControl]="this.chatForm.get('chatText')" clearInput></ion-input>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col size-lg="10" class="ion-no-padding">
+        <ion-input
+          class="item-input-chat"
+          placeholder=" type..."
+          [formControl]="this.chatForm.get('chatText')"
+          clearInput
+        ></ion-input>
       </ion-col>
-      <ion-col class="ion-align-self-center" size="2">
-        <div class="div-ion-buttons">
+      <ion-col  size="2" class="div-ion-buttons">
+        <div class="ion-btn-photo">
           <ion-buttons>
-            <ion-button  autocomplete="on" icon-only color="secondary" (click)="selectImage()">
-             <ion-icon name="send-outline" ></ion-icon
-            ></ion-button>
+            <ion-button
+              autocomplete="on"
+              icon-only
+              color="secondary"
+              (click)="selectImage()"
+            >
+              <ion-icon name="send-outline" class="send-icon"></ion-icon>
+              <ion-icon name="images-outline"></ion-icon>
+            </ion-button>
           </ion-buttons>
         </div>
       </ion-col>

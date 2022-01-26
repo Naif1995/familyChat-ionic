@@ -68,7 +68,10 @@ images: LocalFile[];
     this.authService.getUserData().then((user: User) => {
       this.user = user;
     });
+
+    if (this.socketService.connected) {
     this.socketService.subscribeChat(this.chat.id);
+    }
     this.loadFiles();
   }
 
@@ -150,7 +153,7 @@ images: LocalFile[];
         quality: 90,
         allowEditing: false,
         resultType: CameraResultType.Uri,
-        source: CameraSource.Photos // Camera, Photos or Prompt!
+        source: CameraSource.Prompt // Camera, Photos or Prompt!
     });
     console.log(Image);
     if (image) {
