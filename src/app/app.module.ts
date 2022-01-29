@@ -12,6 +12,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatNativeDateModule} from '@angular/material/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 // import { StorageService } from 'ngx-webstorage-service';
 
@@ -22,7 +23,7 @@ import { CommonModule } from '@angular/common';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule,     IonicStorageModule.forRoot(), BrowserAnimationsModule
-  ,MatNativeDateModule, CommonModule ],
+  ,MatNativeDateModule, CommonModule, HttpClientModule ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy}],
   bootstrap: [AppComponent],

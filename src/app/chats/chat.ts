@@ -1,9 +1,10 @@
-import { Conversation } from './conversation';
+import { ChatHistories } from './conversation';
 
 export class Chat {
-    public id: string;
+    public chatRoomId: string;
+    public chatName: string;
     public title: string;
     public description: string;
-    public imageUrl: string;
-    public conversation: Conversation[];
+    public imageChat: string;
+    public chatHistories: ChatHistories[];
 }

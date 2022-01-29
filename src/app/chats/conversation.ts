@@ -1,7 +1,7 @@
-export class Conversation {
-  public id: string;
-  public text: string;
-  public from: string;
-  public to: string;
+export class ChatHistories {
+  public chatHistoryId: string;
+  public chatText: string;
+  public sendFrom: string;
+  public sendTo: string;
   public created: string;
 }

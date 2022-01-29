@@ -23,23 +23,24 @@ import { SocketService } from './services/socket.service';
 export class ChatsPage implements OnInit {
   chats;
   user: User;
-  title = 'grokonez';
-  description = 'Angular-WebSocket Demo';
 
   constructor(
     private chatService: ChatService,
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthenticationService,
-    private socket: SocketService
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit() {
-    this.chats = this.chatService.chats;
+    this.chatService.chats.subscribe((c) => {
+      if (c) {
+        this.chats = c.chatRoomDtoList;
+      }
+    });
     this.route.queryParams.subscribe(() => {
       this.authService.getUserData().then((user: User) => {
         this.user = user;
+        console.log(this.user);
       });
     });
   }

@@ -6,31 +6,31 @@
     <ion-title class="ion-text-center">{{chat.title}}</ion-title>
     <ion-buttons slot="end" (click)="openDialog()">
       <ion-thumbnail class="ion-thumbnail-photo">
-        <ion-img [src]="chat.imageUrl"></ion-img>
+        <ion-img [src]="chat.imageChat"></ion-img>
       </ion-thumbnail>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen="true">
   <ion-grid>
-    <ion-row *ngFor="let message of chat.conversation">
+    <ion-row *ngFor="let message of chat.chatHistories">
       <ion-col
         size="6"
-        [ngClass]="message.from !== user?.name ? 'chat-alignment' : '' "
+        [ngClass]="message.sendFrom !== user?.name ? 'chat-alignment' : '' "
       >
         <div
-          [ngClass]="message.from !== user?.name ? 'chat-background-color' : 'chat-background-color-curUser' "
+          [ngClass]="message.sendFrom !== user?.name ? 'chat-background-color' : 'chat-background-color-curUser' "
         >
           <ion-grid>
             <ion-row class="ion-row-message-details">
-              <span class="sent-by">{{message.from}}</span>
+              <span class="sent-by">{{message.sendFrom}}</span>
               <span class="created-time"
                 >{{message.created | date:'shortTime'}}</span
               >
             </ion-row>
             <div class="line"></div>
             <ion-row>
-              <p>{{message.text}}</p>
+              <p>{{message.chatText}}</p>
             </ion-row>
           </ion-grid>
         </div>
@@ -50,26 +50,17 @@
           clearInput
         ></ion-input>
       </ion-col>
-      <ion-col  size="2" class="div-ion-buttons">
-        <div class="ion-btn-photo">
-          <ion-buttons>
-            <ion-button
-              autocomplete="on"
-              icon-only
-              color="secondary"
-              (click)="selectImage()"
-            >
-              <ion-icon name="send-outline" class="send-icon"></ion-icon>
-              <ion-icon name="images-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </div>
+      <ion-col size="2" class="div-ion-buttons">
+        <ion-buttons>
+          <ion-icon name="send-outline" class="ion-icon-send"
+          (click)="sendMessage()"></ion-icon>
+          <ion-icon
+            (click)="selectImage()"
+            name="images-outline"
+            class="ion-icon-photo"
+          ></ion-icon>
+        </ion-buttons>
       </ion-col>
-      <!-- <ion-col size="2" class="ion-align-self-center">
-            <ion-button  autocomplete="on" icon-only color="secondary"
-              ><ion-icon name="send-outline"></ion-icon
-            ></ion-button>
-      </ion-col> -->
     </ion-row>
   </ion-grid>
 </ion-footer>
