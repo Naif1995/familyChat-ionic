@@ -61,7 +61,7 @@ images: LocalFile[];
       if (!paramMap.has('chatId')) {
         this.navCtrl.navigateBack('/chats');
         // this.outlet.deactivate();
-        return;
+        // return;
       }
       this.chatService.chats.subscribe((c) => {
         if(c){

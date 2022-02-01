@@ -3,34 +3,34 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/chats"></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">{{chat.title}}</ion-title>
+    <ion-title class="ion-text-center">{{chat?.title}}</ion-title>
     <ion-buttons slot="end" (click)="openDialog()">
       <ion-thumbnail class="ion-thumbnail-photo">
-        <ion-img [src]="chat.imageChat"></ion-img>
+        <ion-img [src]="chat?.imageChat"></ion-img>
       </ion-thumbnail>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen="true">
   <ion-grid>
-    <ion-row *ngFor="let message of chat.chatHistories">
+    <ion-row *ngFor="let message of chat?.chatHistories">
       <ion-col
         size="6"
-        [ngClass]="message.sendFrom !== user?.name ? 'chat-alignment' : '' "
+        [ngClass]="message?.sendFrom !== user?.name ? 'chat-alignment' : '' "
       >
         <div
-          [ngClass]="message.sendFrom !== user?.name ? 'chat-background-color' : 'chat-background-color-curUser' "
+          [ngClass]="message?.sendFrom !== user?.name ? 'chat-background-color' : 'chat-background-color-curUser' "
         >
           <ion-grid>
             <ion-row class="ion-row-message-details">
-              <span class="sent-by">{{message.sendFrom}}</span>
+              <span class="sent-by">{{message?.sendFrom}}</span>
               <span class="created-time"
                 >{{message.created | date:'shortTime'}}</span
               >
             </ion-row>
             <div class="line"></div>
             <ion-row>
-              <p>{{message.chatText}}</p>
+              <p>{{message?.chatText}}</p>
             </ion-row>
           </ion-grid>
         </div>

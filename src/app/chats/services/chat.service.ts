@@ -12,7 +12,7 @@ import { ChatRoomList } from '../ChatRoomList';
 export class ChatService {
   public chats: BehaviorSubject<ChatRoomList> = new BehaviorSubject<ChatRoomList>(null);
 
-  private REST_API_SERVER = 'http://localhost:8081';
+  private REST_API_SERVER = 'https://family-chat-java-websocket.herokuapp.com';
 
   constructor(private httpClient: HttpClient) {
     this.httpClient

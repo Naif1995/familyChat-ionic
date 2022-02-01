@@ -32,7 +32,7 @@ export class SocketService {
   }
 
   connect() {
-    const socket = new SockJS('http://localhost:8081/socket'); //https://family-chat-java-websocket.herokuapp.com/socket
+    const socket = new SockJS('https://family-chat-java-websocket.herokuapp.com/socket'); //https://family-chat-java-websocket.herokuapp.com/socket
     this.stompClient = Stomp.over(socket);
 
     this.stompClient.connect({}, (frame: string) => {
