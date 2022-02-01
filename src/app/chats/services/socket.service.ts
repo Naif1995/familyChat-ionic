@@ -32,7 +32,7 @@ export class SocketService {
   }
 
   connect() {
-    const socket = new SockJS('https://family-chat-java-websocket.herokuapp.com/socket'); //https://family-chat-java-websocket.herokuapp.com/socket
+    const socket = new SockJS('http://localhost:8081/socket'); //https://family-chat-java-websocket.herokuapp.com/socket
     this.stompClient = Stomp.over(socket);
 
     this.stompClient.connect({}, (frame: string) => {
@@ -41,8 +41,8 @@ export class SocketService {
       console.log('Connected: ' + frame);
     });
   }
-  subscribeChat(chatName: string) {
-    this.stompClient.subscribe('/message/' + chatName, (hello: any) => {
+  subscribeChat(chatRoomId: string) {
+    this.stompClient.subscribe('/message/' + chatRoomId, (hello: any) => {
       console.log(hello.body);
     });
   }
@@ -56,11 +56,11 @@ export class SocketService {
     console.log('Disconnected!');
   }
 
-  sendMessage(chatName: string) {
+  sendMessage(chatRoomId: string,chatText: string, sendFrom: string, sendTo: string, created: string) {
     this.stompClient.send(
-      '/app/send/message/' + chatName,
+      '/app/send/message/' + chatRoomId,
       {},
-      JSON.stringify({ name: 'Naif' })
+      JSON.stringify({  chatRoomId, chatText, sendFrom, sendTo, created })
     );
   }
 }

@@ -15,23 +15,17 @@ export class ChatService {
   private REST_API_SERVER = 'https://family-chat-java-websocket.herokuapp.com';
 
   constructor(private httpClient: HttpClient) {
-    this.httpClient
-      .get<ChatRoomList>(this.REST_API_SERVER + '/chats')
-      .pipe(retry(1), catchError(this.processError))
-      .subscribe((c) => {
-        this.chats.next(c);
-      });
+    this.getAllChats();
   }
 
-  // get chats() {
-  //   // eslint-disable-next-line no-underscore-dangle
-  //   return [...this._chats];
-  // }
 
-  getChatsFromServer(): Observable<ChatRoomList> {
-    return this.httpClient
-      .get<ChatRoomList>(this.REST_API_SERVER + '/chats')
-      .pipe(retry(1), catchError(this.processError));
+  getAllChats() {
+     this.httpClient
+    .get<ChatRoomList>(this.REST_API_SERVER + '/chats')
+    .pipe(retry(1), catchError(this.processError))
+    .subscribe((c) => {
+      this.chats.next(c);
+    });
   }
 
   processError(err) {
@@ -45,8 +39,5 @@ export class ChatService {
     return throwError(message);
   }
 
-  // getChat(id: string) {
-  //   // eslint-disable-next-line no-underscore-dangle
-  //   return {...this.c.find(p => p.id === id)};
-  // }
+
 }
