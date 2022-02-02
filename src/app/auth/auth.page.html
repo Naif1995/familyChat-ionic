@@ -1,12 +1,19 @@
 
-<ion-content fullscreen="true">
-  <ion-header collapse="condense">
+<ion-content >
+  <!-- <ion-header collapse="condense">
     <ion-toolbar color="translucent" >
       <ion-title >Family Chat</ion-title>
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
 <ion-content>
   <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <div>
+            <h1>Family Chat</h1>
+        </div>
+      </ion-col>
+    </ion-row>
     <ion-row >
       <ion-col >
         <form
@@ -26,7 +33,6 @@
             class="ion-no-margin"
             color="primary"
             expand="block"
-            type="submit"
             [disabled]="!validations_form.valid"
             >Log In</ion-button
           >
@@ -47,7 +53,7 @@
 
     <ion-row>
       <ion-col>
-        <ion-button type="button" color="danger" expand="block" (click)="googleLogin()">
+        <ion-button color="danger" expand="block" (click)="googleLogin()">
           sign in with Google
         </ion-button>
       </ion-col>

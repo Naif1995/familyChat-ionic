@@ -52,13 +52,13 @@
       </ion-col>
       <ion-col size="2" class="div-ion-buttons">
         <ion-buttons>
-          <ion-icon name="send-outline" class="ion-icon-send"
-          (click)="sendMessage()"></ion-icon>
-          <ion-icon
-            (click)="selectImage()"
-            name="images-outline"
-            class="ion-icon-photo"
-          ></ion-icon>
+          <ion-button (click)="sendMessage()">
+            <ion-icon
+              slot="icon-only"
+              name="send-outline"
+              class="ion-icon-send"
+            ></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-col>
     </ion-row>

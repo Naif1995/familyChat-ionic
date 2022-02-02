@@ -4,7 +4,6 @@
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons> -->
 
-    <!-- <ion-title class="ion-title-chat">chats</ion-title> -->
     <ion-title class="ion-title-user" *ngIf="user">Hello {{user.name}}</ion-title>
     <ion-buttons slot="end">
       <ion-button expand="block" (click)="openCreateChatModal()" icon-only>

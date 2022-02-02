@@ -10,9 +10,9 @@ ion-content{
 
 }
 
-ion-button {
-  --border-radius:0;
-}
+// ion-button {
+//   --border-radius:0;
+// }
 .profile-photo {
   border-radius: 50%;
   width: 300px;
@@ -31,3 +31,10 @@ ion-button {
   text-shadow: 4px 3px 5px #000000;
 }
 
+h1 {
+  color: rgb(251, 251, 251);
+  font: 1.2em "Fira Sans", sans-serif bold 16px/2 cursive;
+  font-size: 30px;
+  text-shadow: 4px 3px 5px #000000;
+  text-transform: uppercase;
+}
