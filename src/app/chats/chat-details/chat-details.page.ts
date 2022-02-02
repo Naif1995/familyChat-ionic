@@ -13,6 +13,7 @@ import {
   ToastController,
 } from '@ionic/angular';
 import { Chat } from '../chat';
+import {ChatHistories} from '../conversation';
 import { ChatService } from '../services/chat.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatPhotoComponent } from './chat-photo/chat-photo.component';
@@ -58,7 +59,6 @@ export class ChatDetailsPage implements OnInit {
     private authService: AuthenticationService,
     private socketService: SocketService,
     private formBuilder: FormBuilder,
-    private plt: Platform,
     private loadingCtrl: LoadingController,
     private fileService: FileService
   ) {
@@ -71,8 +71,7 @@ export class ChatDetailsPage implements OnInit {
     this.route.paramMap.subscribe((paramMap) => {
       if (!paramMap.has('chatId')) {
         this.navCtrl.navigateBack('/chats');
-        // this.outlet.deactivate();
-        // return;
+        return;
       }
       this.chatService.chats.subscribe((c) => {
         if (c) {
@@ -131,7 +130,19 @@ export class ChatDetailsPage implements OnInit {
       'Malak',
       new Date().getTime().toString()
     );
+    this.addChatHistory(this.chatForm.get('chatText').value);
     this.chatForm.get('chatText').reset();
+  }
+
+  addChatHistory(chatText: string) {
+    let historyChat: ChatHistories = {
+      chatHistoryId:Math.random().toString(),
+      chatText,
+      sendFrom: this.user.name,
+      sendTo: 'Malak',
+      created: new Date().getTime().toString()
+    };
+    this.chat.chatHistories.push(historyChat);
   }
 
   openDialog() {

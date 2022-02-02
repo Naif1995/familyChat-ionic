@@ -47,6 +47,7 @@
           class="item-input-chat"
           placeholder=" type..."
           [formControl]="this.chatForm.get('chatText')"
+          (keyup.enter)="sendMessage()"
           clearInput
         ></ion-input>
       </ion-col>

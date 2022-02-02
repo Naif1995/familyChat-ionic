@@ -19,15 +19,13 @@ export class AuthGuardService implements CanActivate {
     public platform: Platform
   ) {}
 
-  canActivate(): boolean {
-    console.log('auth guard');
-    // return this.auth.isAuthenticated().then((val: boolean) => {
-    //   if (val) {
-    //     return val;
-    //   }
-    //   this.navCtrl.navigateRoot('login');
-    //   return val;
-    // });
-    return true;
+  canActivate(): Promise<boolean> {
+    return this.auth.isAuthenticated().then((val: boolean) => {
+      if (val) {
+        return val;
+      }
+      this.navCtrl.navigateRoot('login');
+      return val;
+    });
   }
 }
