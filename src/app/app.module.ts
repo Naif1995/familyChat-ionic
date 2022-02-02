@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatNativeDateModule} from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { AutosizeModule } from 'ngx-autosize';
 
 // import { StorageService } from 'ngx-webstorage-service';
 
@@ -23,7 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule,     IonicStorageModule.forRoot(), BrowserAnimationsModule
-  ,MatNativeDateModule, CommonModule, HttpClientModule ],
+  ,MatNativeDateModule, CommonModule, HttpClientModule,AutosizeModule ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy}],
   bootstrap: [AppComponent],
