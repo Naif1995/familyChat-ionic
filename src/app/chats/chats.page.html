@@ -20,7 +20,7 @@
         <ion-list>
           <ion-item
             *ngFor="let chat of chats"
-            [routerLink]="['/', 'chats', 'chat-details', chat.chatRoomId]"
+            (click)="routeToChat(chat.chatRoomId)"
             detail
           >
             <ion-thumbnail slot="start">

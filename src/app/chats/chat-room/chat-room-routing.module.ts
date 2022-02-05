@@ -5,7 +5,7 @@ import { ChatRoomPage } from './chat-room.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':chatId',
     component: ChatRoomPage
   }
 ];

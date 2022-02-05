@@ -4,12 +4,12 @@ import { AuthGuardService } from './auth/services/auth-gard.service';
 
 const routes: Routes = [
 
-  {
-    path: 'home',
-    loadChildren: () =>
-      import('./home/home.module').then((m) => m.HomePageModule),
-      canActivate: [AuthGuardService],
-  },
+  // {
+  //   path: 'home',
+  //   loadChildren: () =>
+  //     import('./home/home.module').then((m) => m.HomePageModule),
+  //     canActivate: [AuthGuardService],
+  // },
   {
     path: 'profile',
     loadChildren: () =>
@@ -29,7 +29,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'chats',
     pathMatch: 'full'
   }
 ];

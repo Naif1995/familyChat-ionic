@@ -1,3 +1,4 @@
+
 export class ChatHistories {
   public chatHistoryId: string;
   public chatText: string;

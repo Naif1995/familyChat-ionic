@@ -13,7 +13,7 @@ import {
   ToastController,
 } from '@ionic/angular';
 import { Chat } from '../chat';
-import {ChatHistories} from '../conversation';
+import { ChatHistories } from '../conversation';
 import { ChatService } from '../services/chat.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatPhotoComponent } from './chat-photo/chat-photo.component';
@@ -80,9 +80,9 @@ export class ChatDetailsPage implements OnInit {
             const paramValue = parseInt(paramMap.get('chatId'));
             return chatRoomId === paramValue;
           });
-          if (this.chat) {
+          setTimeout(() => {
             this.socketService.subscribeChat(this.chat.chatRoomId);
-          }
+          }, 100);
         }
       });
     });
@@ -122,7 +122,6 @@ export class ChatDetailsPage implements OnInit {
   }
 
   sendMessage() {
-    console.log(this.chatForm.get('chatText').value);
     this.socketService.sendMessage(
       this.chat.chatRoomId,
       this.chatForm.get('chatText').value,
@@ -130,19 +129,7 @@ export class ChatDetailsPage implements OnInit {
       'Malak',
       new Date().getTime().toString()
     );
-    this.addChatHistory(this.chatForm.get('chatText').value);
     this.chatForm.get('chatText').reset();
-  }
-
-  addChatHistory(chatText: string) {
-    let historyChat: ChatHistories = {
-      chatHistoryId:Math.random().toString(),
-      chatText,
-      sendFrom: this.user.name,
-      sendTo: 'Malak',
-      created: new Date().getTime().toString()
-    };
-    this.chat.chatHistories.push(historyChat);
   }
 
   openDialog() {

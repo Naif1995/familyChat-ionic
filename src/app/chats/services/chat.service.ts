@@ -1,31 +1,54 @@
+/* eslint-disable radix */
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, first, retry } from 'rxjs/operators';
 import { ChatRoomList } from '../ChatRoomList';
+import { ChatHistories } from '../conversation';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  public chats: BehaviorSubject<ChatRoomList> = new BehaviorSubject<ChatRoomList>(null);
+  public chats: BehaviorSubject<any> =
+    new BehaviorSubject<any>(null);
+    // public chats: BehaviorSubject<any> =
+    // new BehaviorSubject<ChatRoomList>(null);
 
-  private REST_API_SERVER = 'https://family-chat-java-websocket.herokuapp.com';
+  private REST_API_SERVER = 'http://localhost:8081';
 
   constructor(private httpClient: HttpClient) {
     this.getAllChats();
   }
 
-
   getAllChats() {
-     this.httpClient
-    .get<ChatRoomList>(this.REST_API_SERVER + '/chats')
-    .pipe(retry(1), catchError(this.processError))
-    .subscribe((c) => {
-      this.chats.next(c);
-    });
+    this.httpClient
+      .get<ChatRoomList>(this.REST_API_SERVER + '/chats')
+      .pipe(retry(1), catchError(this.processError))
+      .subscribe((c) => {
+        this.chats.next(c);
+      });
+  }
+
+  addChatHistory(chatRoomId: string, chatText: string, sender: string, created: string) {
+    // let historyChat: ChatHistories = {
+    //   chatHistoryId: Math.random().toString(),
+    //   chatText,
+    //   sendFrom: sender,
+    //   sendTo: 'Malak',
+    //   created: new Date().getTime().toString(),
+    // };
+    // // this.chats.pipe(first()).subscribe((chats) => {
+    // //   let chatRoom = chats.chatRoomDtoList.find(
+    // //     (chat) => chatRoomId === chat.chatRoomId
+    // //   );
+    // //   chatRoom.chatHistories.push(historyChat);
+    // // });
+    this.getAllChats();
   }
 
   processError(err) {
@@ -38,6 +61,4 @@ export class ChatService {
     console.log(message);
     return throwError(message);
   }
-
-
 }

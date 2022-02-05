@@ -1,8 +1,7 @@
 
-export class ChatRequest {
-    public chatRoomId: string;
-    public chatText: string;
-    public sendFrom: string;
-    public sendTo: string;
-    public created: string;
+export  interface ChatRequest {
+     chatRoomId: string;
+     chatText: string;
+     sendFrom: string;
+     created: string;
 }

@@ -7,6 +7,7 @@ import {
   IonRouterOutlet,
   LoadingController,
   ModalController,
+  NavController,
 } from '@ionic/angular';
 import { map } from 'rxjs/operators';
 import { AuthenticationService } from '../auth/services/authentication.service';
@@ -28,7 +29,8 @@ export class ChatsPage implements OnInit {
     private chatService: ChatService,
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    public navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -43,6 +45,11 @@ export class ChatsPage implements OnInit {
         console.log(this.user);
       });
     });
+  }
+
+  routeToChat(chatId: string){
+    console.log(chatId);
+    this.navCtrl.navigateForward('chats/chat-room/'+chatId);
   }
 
   openCreateChatModal() {

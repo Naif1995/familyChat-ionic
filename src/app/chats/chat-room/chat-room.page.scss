@@ -1,4 +1,9 @@
 
+  ion-toolbar {
+    background-color: #a9c6f9
+    // opacity: 0.5;
+
+  }
 .message{
   padding: 10px;
   border-radius: 10px;
@@ -8,8 +13,8 @@
 
 
 .other-message{
-background: var(--ion-color-tertiary);
-color: #fff;
+background: #bcc0d2;
+color: rgb(0, 0, 0);
 }
 
 .my-message {
