@@ -14,6 +14,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AutosizeModule } from 'ngx-autosize';
+import { Vibration } from '@awesome-cordova-plugins/vibration/ngx';
 
 // import { StorageService } from 'ngx-webstorage-service';
 
@@ -26,7 +27,8 @@ import { AutosizeModule } from 'ngx-autosize';
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule,     IonicStorageModule.forRoot(), BrowserAnimationsModule
   ,MatNativeDateModule, CommonModule, HttpClientModule,AutosizeModule ],
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy}],
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    Vibration],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

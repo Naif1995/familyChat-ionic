@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable prefer-const */
+/* eslint-disable arrow-body-style */
+/* eslint-disable no-trailing-spaces */
 /* eslint-disable @typescript-eslint/quotes */
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
 /* eslint-disable radix */
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, IterableDiffers, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   AlertController,
@@ -27,7 +31,9 @@ import {
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileService } from '../services/file.service';
 import { ChatPhotoComponent } from '../chat-details/chat-photo/chat-photo.component';
-import { first } from 'rxjs/operators';
+import { filter, first, map, tap } from 'rxjs/operators';
+import { Vibration } from '@awesome-cordova-plugins/vibration/ngx';
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 const IMAGE_DIR = 'stored-images';
 
@@ -48,12 +54,14 @@ export class ChatRoomPage implements OnInit {
   chat: Chat;
   user: User;
   chatForm: FormGroup;
-  firstLoad =true;
+  firstLoad = true;
+  chatRoomId;
+  differ: any;
   images: LocalFile[];
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private chatService: ChatService,
+    public chatService: ChatService,
     public alertController: AlertController,
     public dialog: MatDialog,
     private authService: AuthenticationService,
@@ -61,51 +69,76 @@ export class ChatRoomPage implements OnInit {
     private formBuilder: FormBuilder,
     private loadingCtrl: LoadingController,
     private fileService: FileService,
-    private animationCtrl: AnimationController
-      ) {
+    private animationCtrl: AnimationController,
+    differs: IterableDiffers,
+    private vibration: Vibration
+  ) {
     this.chatForm = this.formBuilder.group({
       chatText: [''],
     });
+    this.differ = differs.find([]).create(null);
   }
 
-  ionViewDidEnter() {
-    setTimeout(() => {
-    this.socketService.subscribeChat(this.chat.chatRoomId);
-    this.firstLoad=false;
-    },700);
+  ngDoCheck() {
+    const change = this.differ.diff(this.chatService.chatHistories);
+    if(change){
+    console.log(change);
+    setTimeout( ()=> {  this.content.scrollToBottom(500);},300);
+    }
   }
+
+  ionViewDidEnter() {}
   ngOnInit() {
-    this.route.paramMap.pipe()
-    .subscribe((paramMap) => {
+    this.route.paramMap.pipe().subscribe(async (paramMap) => {
       if (!paramMap.has('chatId')) {
         this.navCtrl.navigateBack('/chats');
         return;
       }
-      this.chatService.chats.pipe().subscribe((c) => {
-        if (c) {
-          console.log(c);
-          this.chat = c.chatRoomDtoList.find((obj) => {
-            const chatRoomId = parseInt(obj.chatRoomId);
-            const paramValue = parseInt(paramMap.get('chatId'));
-            return chatRoomId === paramValue;
-          });
-          setTimeout(() => {
-            this.content.scrollToBottom(500);
-            if(!this.firstLoad) {
-            this.animateButton(
-              this.chat.chatHistories[this.chat.chatHistories.length - 1]
-                .chatHistoryId
-            );
-            }
-          }, 100);
-        }
-      });
+      this.chatRoomId = paramMap.get('chatId');
+      this.getChatRoom(this.chatRoomId);
     });
     this.authService.getUserData().then((user: User) => {
       this.user = user;
     });
     this.loadFiles();
+    // setTimeout(() => {
+    //
+    // this.firstLoad=false;
+    // },2000);
   }
+  getChatRoom(chatRoomIdParam) {
+    return this.chatService.chats
+      .pipe(
+        map((val) => {
+          if (val) {
+            return val.chatRoomDtoList.find((obj) => {
+              const chatRoomId = parseInt(obj.chatRoomId);
+              const paramValue = parseInt(chatRoomIdParam);
+              return chatRoomId === paramValue;
+            });
+          }
+        }),
+        tap((val) => {
+          if (val) {
+            this.chat = val;
+            this.chatService.chatHistories = val.chatHistories;
+          }
+        })
+      )
+      .subscribe(() => {
+        setTimeout(() => {
+          this.content.scrollToBottom(500);
+          this.socketService.subscribeChat(this.chat.chatRoomId);
+        }, 100);
+      });
+  }
+
+  doVibrationFor() {
+    // Vibrate the device for given milliseconds
+    // Duration is ignored on iOS and limited to 1 second.
+    this.vibration.vibrate(10000);
+  }
+
 
   async loadFiles() {
     this.images = [];
@@ -144,8 +177,24 @@ export class ChatRoomPage implements OnInit {
       'Malak',
       new Date().getTime().toString()
     );
+    // this.vibration.vibrate(10000);
+    // console.log(this.vibration.vibrate(10000));
+    // Haptics.vibrate({
+    //   duration:10000
+    // });
+    // console.log(Haptics.notification({
+    //   type:NotificationType.Success
+    // }));
+    // this.doVibrationFor();
+    // navigator.vibrate(10000);
+    // navigator.vibrate(10000);
+    this.vibration.vibrate(10000);
+    // Haptics.vibrate({duration:1000});
+    // console.log(navigator.vibrate(10000));
+
     this.chatForm.get('chatText').reset();
   }
+
 
   openDialog() {
     this.dialog.open(ChatPhotoComponent, {
@@ -153,6 +202,7 @@ export class ChatRoomPage implements OnInit {
         imageUrl: this.chat.imageChat,
       },
     });
+
   }
 
   async selectImage() {
@@ -179,8 +229,7 @@ export class ChatRoomPage implements OnInit {
         { offset: 0, boxShadow: '0 0 0 0 rgba(44, 103, 255, 0.4)' },
         { offset: 0.7, boxShadow: '0 0 0 10px rgba(44, 103, 255, 0)' },
         { offset: 1, boxShadow: '0 0 0 0 rgba(44, 103, 255, 0)' },
-      ]
-      );
+      ]);
 
     animation.play();
   }

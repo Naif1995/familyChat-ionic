@@ -14,14 +14,15 @@ import { ChatHistories } from '../conversation';
   providedIn: 'root',
 })
 export class ChatService {
-  public chats: BehaviorSubject<any> =
-    new BehaviorSubject<any>(null);
-    // public chats: BehaviorSubject<any> =
-    // new BehaviorSubject<ChatRoomList>(null);
+  public chats: BehaviorSubject<ChatRoomList> =
+    new BehaviorSubject<ChatRoomList>(null);
+    chatHistories: ChatHistories[];
 
-  private REST_API_SERVER = 'http://localhost:8081';
+
+  private REST_API_SERVER = 'https://family-chat-java-websocket.herokuapp.com';
 
   constructor(private httpClient: HttpClient) {
+    console.log('ChatService getAllChats');
     this.getAllChats();
   }
 
@@ -34,22 +35,21 @@ export class ChatService {
       });
   }
 
-  addChatHistory(chatRoomId: string, chatText: string, sender: string, created: string) {
-    // let historyChat: ChatHistories = {
-    //   chatHistoryId: Math.random().toString(),
-    //   chatText,
-    //   sendFrom: sender,
-    //   sendTo: 'Malak',
-    //   created: new Date().getTime().toString(),
-    // };
-    // // this.chats.pipe(first()).subscribe((chats) => {
-    // //   let chatRoom = chats.chatRoomDtoList.find(
-    // //     (chat) => chatRoomId === chat.chatRoomId
-    // //   );
-    // //   chatRoom.chatHistories.push(historyChat);
-    // // });
-    this.getAllChats();
-  }
+  // addChatHistory(chatRoomId: string, chatText: string, sender: string, created: string) {
+  //   let historyChat: ChatHistories = {
+  //     chatHistoryId: Math.random().toString(),
+  //     chatText,
+  //     sendFrom: sender,
+  //     sendTo: 'Malak',
+  //     created: new Date().getTime().toString(),
+  //   };
+  //   this.chats.pipe(first()).subscribe((chats) => {
+  //     let chatRoom = chats.chatRoomDtoList.find(
+  //       (chat) => chatRoomId === chat.chatRoomId
+  //     );
+  //     chatRoom.chatHistories.push(historyChat);
+  //   });
+  // }
 
   processError(err) {
     let message = '';

@@ -23,10 +23,11 @@ export class SocketService {
   }
 
   connect() {
-    const socket = new SockJS('http://localhost:8081/socket'); //https://family-chat-java-websocket.herokuapp.com/socket
+    const socket = new SockJS('https://family-chat-java-websocket.herokuapp.com/socket'); //https://family-chat-java-websocket.herokuapp.com/socket
     this.stompClient = Stomp.over(socket);
 
     this.stompClient.connect({}, (frame: string) => {});
+    console.log('Naif stompClient');
   }
 
   disconnect() {
@@ -53,12 +54,14 @@ export class SocketService {
   subscribeChat(chatRoomId: string) {
     this.stompClient.subscribe('/message/' + chatRoomId, (body: any) => {
       const chatRequest: ChatRequest = JSON.parse(body.body);
-      this.chatService.addChatHistory(
-        chatRequest.chatRoomId,
-        chatRequest.chatText,
-        chatRequest.sendFrom,
-        chatRequest.created
-      );
+      const chatHistory: ChatHistories ={
+        chatHistoryId:'',
+        sendFrom:chatRequest.sendFrom,
+        sendTo:'Malak',
+        chatText:chatRequest.chatText,
+        created:chatRequest.created
+      };
+      this.chatService.chatHistories.push(chatHistory);
     });
   }
 }

@@ -14,7 +14,7 @@
 
 <ion-content>
 <ion-grid>
-  <ion-row *ngFor="let message of chat?.chatHistories" >
+  <ion-row *ngFor="let message of chatService.chatHistories" >
     <ion-col [id]="'chat_'+message.chatHistoryId"  [size]=rowSize(message.chatText) *ngIf="message?.sendFrom !== user?.name" class="message other-message">
       <b>{{message.sendFrom}}</b><br>
       <span>{{message.chatText}}</span>
