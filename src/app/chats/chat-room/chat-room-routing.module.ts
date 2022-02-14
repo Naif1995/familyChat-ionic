@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: ':chatId',
     component: ChatRoomPage
+  },
+  {
+    path: 'chat-room-photo',
+    loadChildren: () => import('./chat-room-photo/chat-room-photo.module').then( m => m.ChatRoomPhotoPageModule)
   }
 ];
 

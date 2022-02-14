@@ -30,9 +30,8 @@ export class ChatsPage implements OnInit {
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private authService: AuthenticationService,
-    public navCtrl: NavController,
-    private socketService: SocketService
-  ) {}
+    public navCtrl: NavController
+      ) {}
 
   ngOnInit() {
     this.chatService.chats.subscribe((c) => {

@@ -81,7 +81,7 @@ export class ChatDetailsPage implements OnInit {
             return chatRoomId === paramValue;
           });
           setTimeout(() => {
-            this.socketService.subscribeChat(this.chat.chatRoomId);
+            // this.socketService.subscribeChat(this.chat.chatRoomId);
           }, 100);
         }
       });
@@ -122,14 +122,14 @@ export class ChatDetailsPage implements OnInit {
   }
 
   sendMessage() {
-    this.socketService.sendMessage(
-      this.chat.chatRoomId,
-      this.chatForm.get('chatText').value,
-      this.user.name,
-      'Malak',
-      new Date().getTime().toString()
-    );
-    this.chatForm.get('chatText').reset();
+    // this.socketService.sendMessage(
+    //   this.chat.chatRoomId,
+    //   this.chatForm.get('chatText').value,
+    //   this.user.name,
+    //   'Malak',
+    //   new Date().getTime().toString()
+    // );
+    // this.chatForm.get('chatText').reset();
   }
 
   openDialog() {

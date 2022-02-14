@@ -27,8 +27,8 @@ export class SocketService {
   private state: BehaviorSubject<SocketClientState>;
 
   constructor(private chatService: ChatService) {
-    //this.connectOld();//https://family-chat-java-websocket.herokuapp.com/socket
-    this.client = Stomp.over(new SockJS('http://localhost:8081/socket'));
+    //https://family-chat-java-websocket.herokuapp.com/socket
+    this.client = Stomp.over(new SockJS('https://family-chat-java-websocket.herokuapp.com/socket'));
     this.state = new BehaviorSubject<SocketClientState>(
       SocketClientState.ATTEMPTING
     );
@@ -57,34 +57,6 @@ export class SocketService {
     });
   }
 
-  ngOnDestroy() {
-    this.connect()
-      .pipe(first())
-      .subscribe((client) => client.disconnect(null));
-  }
-
-  // onMessage(topic: string, handler = SocketService.jsonHandler): Observable<any> {
-  //   return this.connect().pipe(first(), switchMap(client => {
-  //     return new Observable<any>(observer => {
-  //       const subscription: StompSubscription = client.subscribe(topic, message => {
-  //         observer.next(handler(message));
-  //       });
-  //       return () => client.unsubscribe(subscription .id);
-  //     });
-  //   }));
-  // }
-
-  // static jsonHandler(message: Message): any {
-  //   return JSON.parse(message.body);
-  // }
-
-  // onPlainMessage(topic: string): Observable<string> {
-  //   return this.onMessage(topic, SocketService.textHandler);
-  // }
-  // static textHandler(message: Message): string {
-  //   return message.body;
-  // }
-
   send(topic: string, payload: any): void {
     console.log(this.connect());
     this.connect()
@@ -92,56 +64,10 @@ export class SocketService {
       .subscribe((client) => client.send(topic, {}, JSON.stringify(payload)));
   }
 
-  socket: any;
-  greetings: string[] = [];
-  disabled = true;
-  name: string;
-  connected = false;
-
-  public stompClient = null;
-
-  connectOld() {
-    const socket = new SockJS(
-      'https://family-chat-java-websocket.herokuapp.com/socket'
-    ); //https://family-chat-java-websocket.herokuapp.com/socket
-    this.stompClient = Stomp.over(socket);
-
-    this.stompClient.connect({}, (frame: string) => {});
-    console.log('Naif stompClient');
+  ngOnDestroy() {
+    this.connect()
+      .pipe(first())
+      .subscribe((client) => client.disconnect(null));
   }
 
-  disconnect() {
-    if (this.stompClient != null) {
-      this.stompClient.disconnect();
-    }
-    console.log('Disconnected!');
-  }
-
-  sendMessage(
-    chatRoomId: string,
-    chatText: string,
-    sendFrom: string,
-    sendTo: string,
-    created: string
-  ) {
-    this.stompClient.send(
-      '/app/send/message/' + chatRoomId,
-      {},
-      JSON.stringify({ chatRoomId, chatText, sendFrom, sendTo, created })
-    );
-  }
-
-  subscribeChat(chatRoomId: string) {
-    this.stompClient.subscribe('/message/' + chatRoomId, (body: any) => {
-      const chatRequest: ChatRequest = JSON.parse(body.body);
-      const chatHistory: ChatHistories = {
-        chatHistoryId: '',
-        sendFrom: chatRequest.sendFrom,
-        sendTo: 'Malak',
-        chatText: chatRequest.chatText,
-        created: chatRequest.created,
-      };
-      this.chatService.chatHistories.push(chatHistory);
-    });
-  }
 }

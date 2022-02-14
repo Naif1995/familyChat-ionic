@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AutosizeModule } from 'ngx-autosize';
 import { Vibration } from '@awesome-cordova-plugins/vibration/ngx';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import { Dialogs } from '@awesome-cordova-plugins/dialogs/ngx';
 
 // import { StorageService } from 'ngx-webstorage-service';
 
@@ -29,7 +30,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
   ,MatNativeDateModule, CommonModule, HttpClientModule,AutosizeModule, ScrollingModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-    Vibration, ScrollingModule],
+    Vibration, ScrollingModule, Dialogs],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

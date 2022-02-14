@@ -55,4 +55,8 @@ export class AuthenticationService implements OnInit {
       )
       .toPromise();
   }
+
+  logOut() {
+    this.storage.remove(TOKEN_KEY);
+  }
 }

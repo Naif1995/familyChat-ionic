@@ -22,10 +22,10 @@ import {
   IonContent,
   IonInfiniteScroll,
   LoadingController,
+  ModalController,
   NavController,
 } from '@ionic/angular';
 import { Chat } from '../chat';
-import { ChatHistories } from '../conversation';
 import { ChatService } from '../services/chat.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticationService } from 'src/app/auth/services/authentication.service';
@@ -35,17 +35,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   Camera,
   CameraResultType,
-  CameraSource,
-  Photo,
+  CameraSource
 } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileService } from '../services/file.service';
-import { ChatPhotoComponent } from '../chat-details/chat-photo/chat-photo.component';
-import { filter, first, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Vibration } from '@awesome-cordova-plugins/vibration/ngx';
-import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Observable } from 'rxjs';
+import { ChatRoomPhotoPage } from './chat-room-photo/chat-room-photo.page';
 
 const IMAGE_DIR = 'stored-images';
 
@@ -87,7 +84,8 @@ export class ChatRoomPage implements OnInit {
     private fileService: FileService,
     private animationCtrl: AnimationController,
     differs: IterableDiffers,
-    private vibration: Vibration
+    private vibration: Vibration,
+    private modalCtrl: ModalController,
   ) {
     this.chatForm = this.formBuilder.group({
       chatText: [''],
@@ -140,9 +138,6 @@ export class ChatRoomPage implements OnInit {
       .subscribe(() => {
         setTimeout(() => {
           this.content.scrollToBottom();
-          if (this.socketService.connected) {
-            this.socketService.subscribeChat(this.chat.chatRoomId);
-          }
         }, 100);
       });
   }
@@ -206,13 +201,22 @@ export class ChatRoomPage implements OnInit {
   }
 
   openDialog() {
-    this.dialog.open(ChatPhotoComponent, {
-      data: {
-        imageUrl: this.chat.imageChat,
-      },
-    });
+    this.modalCtrl
+      .create({
+        component: ChatRoomPhotoPage,
+        componentProps: { imageUrl: this.chat?.imageChat },
+      })
+      .then((modalEl) => {
+        modalEl.present();
+        return modalEl.onDidDismiss();
+      })
+      .then((resultData) => {
+        console.log(resultData.data, resultData.role);
+        if (resultData.role === 'confirm') {
+          console.log('confirm!');
+        }
+      });
   }
-
   async selectImage() {
     const image = await Camera.getPhoto({
       quality: 90,

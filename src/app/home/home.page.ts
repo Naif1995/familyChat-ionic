@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import { Platform } from '@ionic/angular';
-import { delay } from 'rxjs/operators';
 import { AuthenticationService } from '../auth/services/authentication.service';
 
 const TOKEN_KEY = 'auth-token';
@@ -30,6 +26,8 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
   }
+  onLogout() {
 
+  }
 
 }

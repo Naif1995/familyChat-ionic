@@ -33,13 +33,17 @@ import { StorageService } from './services/storage.service';
 export class AuthPage implements OnInit {
   validations_form: FormGroup;
   loading;
+  userInputGuest;
   constructor(
     public formBuilder: FormBuilder,
-    private router: Router,
-    private authService: AuthenticationService,
-    public loadingCtrl: LoadingController
-  ) {
+    public navCtrl: NavController,
+        private authService: AuthenticationService,
+    public loadingCtrl: LoadingController,
 
+  ) {
+    this.userInputGuest = this.formBuilder.group({
+      userInputGuest: ['', Validators.required,,Validators.pattern('^[a-z0-9_-]{8,15}$')],
+    });
   }
 
   ionViewDidEnter() {
@@ -105,8 +109,20 @@ export class AuthPage implements OnInit {
         user.id,
         user.authentication.idToken
       );
-      this.router.navigateByUrl('home');
+      this.navCtrl.navigateForward('home');
     }
+  }
+
+  logInAsGuset() {
+    this.authService.setUserData(
+      this.userInputGuest.get('userInputGuest').value,
+      this.userInputGuest.get('userInputGuest').value,
+      'Unique id'
+    );
+    this.navCtrl.navigateForward('chats')
+    .then(()=> this.navCtrl.navigateForward('chats')
+    );
+    this.userInputGuest.get('userInputGuest').reset();
   }
 
   presentLoading() {
