@@ -51,6 +51,11 @@ export class ChatService {
   //   });
   // }
 
+  getUsersData() {
+    const url = '../../assets/data/users.json';
+    return this.httpClient.get(url);
+  }
+
   processError(err) {
     let message = '';
     if (err.error instanceof ErrorEvent) {

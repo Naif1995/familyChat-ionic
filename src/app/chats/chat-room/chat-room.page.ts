@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/semi */
+/* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable prefer-const */
 /* eslint-disable arrow-body-style */
@@ -5,12 +7,20 @@
 /* eslint-disable @typescript-eslint/quotes */
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
 /* eslint-disable radix */
-import { Component, ElementRef, IterableDiffers, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  IterableDiffers,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   AlertController,
   AnimationController,
   IonContent,
+  IonInfiniteScroll,
   LoadingController,
   NavController,
 } from '@ionic/angular';
@@ -34,6 +44,8 @@ import { ChatPhotoComponent } from '../chat-details/chat-photo/chat-photo.compon
 import { filter, first, map, tap } from 'rxjs/operators';
 import { Vibration } from '@awesome-cordova-plugins/vibration/ngx';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { Observable } from 'rxjs';
 
 const IMAGE_DIR = 'stored-images';
 
@@ -49,8 +61,11 @@ interface LocalFile {
   styleUrls: ['./chat-room.page.scss'],
 })
 export class ChatRoomPage implements OnInit {
-  @ViewChild(IonContent) content: IonContent;
-
+  @ViewChild(IonInfiniteScroll, { static: false })
+  infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonContent, { static: false }) content: IonContent;
+  @ViewChild(CdkVirtualScrollViewport, { static: false })
+  public virtualScrollViewport?: CdkVirtualScrollViewport;
   chat: Chat;
   user: User;
   chatForm: FormGroup;
@@ -58,6 +73,7 @@ export class ChatRoomPage implements OnInit {
   chatRoomId;
   differ: any;
   images: LocalFile[];
+  chatHistory: any = [];
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
@@ -81,14 +97,15 @@ export class ChatRoomPage implements OnInit {
 
   ngDoCheck() {
     const change = this.differ.diff(this.chatService.chatHistories);
-    if(change){
-    console.log(change);
-    setTimeout( ()=> {  this.content.scrollToBottom(500);},300);
+    if (change) {
+      console.log(change);
+      setTimeout(() => {
+        this.content.scrollToBottom(100);
+      }, 300);
     }
   }
 
-  ionViewDidEnter() {}
-  ngOnInit() {
+  ionViewDidEnter() {
     this.route.paramMap.pipe().subscribe(async (paramMap) => {
       if (!paramMap.has('chatId')) {
         this.navCtrl.navigateBack('/chats');
@@ -97,15 +114,10 @@ export class ChatRoomPage implements OnInit {
       this.chatRoomId = paramMap.get('chatId');
       this.getChatRoom(this.chatRoomId);
     });
-    this.authService.getUserData().then((user: User) => {
-      this.user = user;
-    });
-    this.loadFiles();
-    // setTimeout(() => {
-    //
-    // this.firstLoad=false;
-    // },2000);
+    this.getUserData();
+    // this.loadFiles();
   }
+  ngOnInit() {}
   getChatRoom(chatRoomIdParam) {
     return this.chatService.chats
       .pipe(
@@ -127,18 +139,23 @@ export class ChatRoomPage implements OnInit {
       )
       .subscribe(() => {
         setTimeout(() => {
-          this.content.scrollToBottom(500);
-          this.socketService.subscribeChat(this.chat.chatRoomId);
+          this.content.scrollToBottom();
+          if (this.socketService.connected) {
+            this.socketService.subscribeChat(this.chat.chatRoomId);
+          }
         }, 100);
       });
   }
 
-  doVibrationFor() {
-    // Vibrate the device for given milliseconds
-    // Duration is ignored on iOS and limited to 1 second.
-    this.vibration.vibrate(10000);
+  getUserData() {
+    this.authService.getUserData().then((user: User) => {
+      this.user = user;
+    });
   }
 
+  doVibrationFor() {
+    this.vibration.vibrate(10000);
+  }
 
   async loadFiles() {
     this.images = [];
@@ -170,31 +187,23 @@ export class ChatRoomPage implements OnInit {
   }
 
   sendMessage() {
-    this.socketService.sendMessage(
-      this.chat.chatRoomId,
-      this.chatForm.get('chatText').value,
-      this.user.name,
-      'Malak',
-      new Date().getTime().toString()
-    );
-    // this.vibration.vibrate(10000);
-    // console.log(this.vibration.vibrate(10000));
-    // Haptics.vibrate({
-    //   duration:10000
-    // });
-    // console.log(Haptics.notification({
-    //   type:NotificationType.Success
-    // }));
-    // this.doVibrationFor();
-    // navigator.vibrate(10000);
-    // navigator.vibrate(10000);
-    this.vibration.vibrate(10000);
-    // Haptics.vibrate({duration:1000});
-    // console.log(navigator.vibrate(10000));
-
+    // this.socketService.sendMessage(
+    //   this.chat.chatRoomId,
+    //   this.chatForm.get('chatText').value,
+    //   this.user.name,
+    //   'Malak',
+    //   new Date().getTime().toString()
+    // );
+    this.socketService.send('/app/send/message/rooms',{
+      chatRoomId: this.chat.chatRoomId,
+      chatText: this.chatForm.get('chatText').value,
+      sendFrom: this.user.name,
+      sendTo: 'M',
+      created: new Date().getTime().toString(),
+    });
+    this.vibration.vibrate(1000);
     this.chatForm.get('chatText').reset();
   }
-
 
   openDialog() {
     this.dialog.open(ChatPhotoComponent, {
@@ -202,7 +211,6 @@ export class ChatRoomPage implements OnInit {
         imageUrl: this.chat.imageChat,
       },
     });
-
   }
 
   async selectImage() {
