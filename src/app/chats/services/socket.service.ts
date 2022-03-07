@@ -29,6 +29,8 @@ export class SocketService {
   constructor(private chatService: ChatService) {
     //https://family-chat-java-websocket.herokuapp.com/socket
     this.client = Stomp.over(new SockJS('https://family-chat-java-websocket.herokuapp.com/socket'));
+    this.client.reconnect_delay = 5000;
+
     this.state = new BehaviorSubject<SocketClientState>(
       SocketClientState.ATTEMPTING
     );
@@ -36,6 +38,7 @@ export class SocketService {
       this.state.next(SocketClientState.CONNECTED);
       this.client.subscribe('/message/rooms', (message) => {
         const payload = JSON.parse(message.body);
+        console.log(payload);
         this.chatService.chatHistories.push(payload);
       });
     });

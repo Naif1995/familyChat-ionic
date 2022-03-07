@@ -182,13 +182,6 @@ export class ChatRoomPage implements OnInit {
   }
 
   sendMessage() {
-    // this.socketService.sendMessage(
-    //   this.chat.chatRoomId,
-    //   this.chatForm.get('chatText').value,
-    //   this.user.name,
-    //   'Malak',
-    //   new Date().getTime().toString()
-    // );
     this.socketService.send('/app/send/message/rooms',{
       chatRoomId: this.chat.chatRoomId,
       chatText: this.chatForm.get('chatText').value,
@@ -211,10 +204,7 @@ export class ChatRoomPage implements OnInit {
         return modalEl.onDidDismiss();
       })
       .then((resultData) => {
-        console.log(resultData.data, resultData.role);
-        if (resultData.role === 'confirm') {
-          console.log('confirm!');
-        }
+        console.log(resultData.data);
       });
   }
   async selectImage() {
