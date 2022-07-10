@@ -15,6 +15,7 @@ import { User } from '../auth/services/user.module';
 import { CreateChatPage } from './create-chat/create-chat.page';
 import { ChatService } from './services/chat.service';
 import { SocketService } from './services/socket.service';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-chats',
@@ -30,7 +31,8 @@ export class ChatsPage implements OnInit {
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private authService: AuthenticationService,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    public userService: UserService
       ) {}
 
   ngOnInit() {
@@ -41,8 +43,8 @@ export class ChatsPage implements OnInit {
     });
     this.route.queryParams.subscribe(() => {
       this.authService.getUserData().then((user: User) => {
-        this.user = user;
-        console.log(this.user);
+        this.userService.user = user;
+        console.log(this.userService.user);
       });
     });
   }

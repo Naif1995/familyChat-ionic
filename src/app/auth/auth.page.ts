@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+// import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { HttpClient } from '@angular/common/http';
 
 import {
@@ -50,7 +50,7 @@ export class AuthPage implements OnInit {
     /**
      * check login state
      */
-    GoogleAuth.init();
+    // GoogleAuth.init();
   }
   ngOnInit() {
     this.validations_form = this.formBuilder.group({
@@ -96,22 +96,22 @@ export class AuthPage implements OnInit {
     console.log(values);
   }
 
-  async googleLogin() {
-    this.presentLoading();
-    const user = await GoogleAuth.signIn()
-    .catch((err) => {
-      this.dismissLoading();
-    });
-    if (user) {
-      this.dismissLoading();
-      this.authService.setUserData(
-        user.givenName,
-        user.id,
-        user.authentication.idToken
-      );
-      this.navCtrl.navigateForward('home');
-    }
-  }
+  // async googleLogin() {
+  //   this.presentLoading();
+  //   const user = await GoogleAuth.signIn()
+  //   .catch((err) => {
+  //     this.dismissLoading();
+  //   });
+  //   if (user) {
+  //     this.dismissLoading();
+  //     this.authService.setUserData(
+  //       user.givenName,
+  //       user.id,
+  //       user.authentication.idToken
+  //     );
+  //     this.navCtrl.navigateForward('home');
+  //   }
+  // }
 
   logInAsGuset() {
     this.authService.setUserData(

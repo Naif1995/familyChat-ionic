@@ -12,31 +12,47 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [scrollEvents]="true"
+(ionScrollStart)="logScrollStart($event)"
+(ionScroll)="logScrolling($event)"
+(ionScrollEnd)="logScrollEnd($event)">
   <ion-grid>
-    <ion-row *ngFor="let message of chatService?.chatHistories">
-      <ion-col
-        [id]="'chat_'+message.chatHistoryId"
-        [size]="rowSize(message.chatText)"
-        *ngIf="message?.sendFrom !== user?.name"
-        class="message other-message"
-      >
-        <b>{{message.sendFrom}}</b><br />
-        <span>{{message.chatText}}</span>
-        <div class="time" class="ion-text-right">
-          {{message.created | date: 'shortTime'}}
-        </div>
-      </ion-col>
 
+    <ion-infinite-scroll disabled="false"  threshold="120px" (ionInfinite)="loadData($event)" position="top" >
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    <ion-row *ngFor="let message of chatHistoriesView?.reverse()">
+
+<!--
       <ion-col
+      *ngIf="message?.sendFrom === this.userService?.user?.name"
         [id]="'chat_'+message.chatHistoryId"
         [offset]="myoffSetSize(message.chatText)"
         [size]="myRowSize(message.chatText)"
-        *ngIf="message?.sendFrom === user?.name"
         class="message my-message"
       >
+
         <b>{{message.sendFrom}}</b><br />
         <span>{{message.chatText}}</span>
+        <span>{{message.chatHistoryId}}</span>
+        <div class="time" class="ion-text-right">
+          {{message.created | date: 'shortTime'}}
+        </div>
+      </ion-col> -->
+
+      <ion-col
+      *ngIf="message?.sendFrom !== this.userService?.user?.name"
+        [id]="'chat_'+message.chatHistoryId"
+        [size]="rowSize(message.chatText)"
+        class="message other-message"
+      >
+
+        <b>{{message.sendFrom}}</b><br />
+        <span>{{message.chatText}}</span>
+        <span>{{message.chatHistoryId}}</span>
         <div class="time" class="ion-text-right">
           {{message.created | date: 'shortTime'}}
         </div>

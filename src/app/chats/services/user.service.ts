@@ -11,6 +11,8 @@ const TOKEN_KEY = 'auth-token';
 })
 export class UserService {
 
+  user: User;
+
   constructor(private storageService: StorageService) { }
 
   getUserData(): Promise<User> {

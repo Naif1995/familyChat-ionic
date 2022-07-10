@@ -32,19 +32,19 @@ import { AuthenticationService } from 'src/app/auth/services/authentication.serv
 import { User } from 'src/app/auth/services/user.module';
 import { SocketService } from '../services/socket.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {
-  Camera,
-  CameraResultType,
-  CameraSource
-} from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileService } from '../services/file.service';
 import { map, tap } from 'rxjs/operators';
 import { Vibration } from '@awesome-cordova-plugins/vibration/ngx';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ChatRoomPhotoPage } from './chat-room-photo/chat-room-photo.page';
+import { ChatHistories } from '../conversation';
+import { UserService } from '../services/user.service';
 
 const IMAGE_DIR = 'stored-images';
+const ALLOW_MESSAGES = 8;
+const NUM_PIXEL = 100;
 
 interface LocalFile {
   name: string;
@@ -71,6 +71,9 @@ export class ChatRoomPage implements OnInit {
   differ: any;
   images: LocalFile[];
   chatHistory: any = [];
+  chatHistoriesView: ChatHistories[];
+  lock = true;
+  numberMessages = 0;
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
@@ -86,6 +89,8 @@ export class ChatRoomPage implements OnInit {
     differs: IterableDiffers,
     private vibration: Vibration,
     private modalCtrl: ModalController,
+    //TODO when refresh page need get user date after lose it.
+    public userService: UserService
   ) {
     this.chatForm = this.formBuilder.group({
       chatText: [''],
@@ -112,7 +117,10 @@ export class ChatRoomPage implements OnInit {
       this.chatRoomId = paramMap.get('chatId');
       this.getChatRoom(this.chatRoomId);
     });
-    this.getUserData();
+    setTimeout(() => {
+      this.content.scrollToBottom();
+    }, 1);
+    console.log('ionViewDidEnter');
     // this.loadFiles();
   }
   ngOnInit() {}
@@ -131,6 +139,10 @@ export class ChatRoomPage implements OnInit {
         tap((val) => {
           if (val) {
             this.chat = val;
+            this.chatHistoriesView = val.chatHistories.slice(
+              ALLOW_MESSAGES * -1
+            );
+            this.chatHistoriesView = this.chatHistoriesView.reverse();
             this.chatService.chatHistories = val.chatHistories;
           }
         })
@@ -138,14 +150,8 @@ export class ChatRoomPage implements OnInit {
       .subscribe(() => {
         setTimeout(() => {
           this.content.scrollToBottom();
-        }, 100);
+        }, 1);
       });
-  }
-
-  getUserData() {
-    this.authService.getUserData().then((user: User) => {
-      this.user = user;
-    });
   }
 
   doVibrationFor() {
@@ -182,10 +188,10 @@ export class ChatRoomPage implements OnInit {
   }
 
   sendMessage() {
-    this.socketService.send('/app/send/message/rooms',{
+    this.socketService.send('/app/send/message/rooms', {
       chatRoomId: this.chat.chatRoomId,
       chatText: this.chatForm.get('chatText').value,
-      sendFrom: this.user.name,
+      sendFrom: this.userService.user.name,
       sendTo: 'M',
       created: new Date().getTime().toString(),
     });
@@ -218,6 +224,69 @@ export class ChatRoomPage implements OnInit {
     if (image) {
       this.fileService.saveImage(image);
     }
+  }
+  loadData(event) {
+    let minChatHistoriesId = 0;
+    setTimeout(() => {
+      if (!this.firstLoad) {
+        this.numberMessages = this.numberMessages + ALLOW_MESSAGES;
+        const chatHistoriesViewTemp: ChatHistories[] =
+          this.chatService.chatHistories.slice(this.numberMessages * -1);
+        //get min ID in list to avoid dublication
+        minChatHistoriesId = Math.min(
+          ...chatHistoriesViewTemp.map((o) => parseInt(o.chatHistoryId))
+        );
+        let missing: ChatHistories[] = [
+          ...chatHistoriesViewTemp.filter(
+            (x) => !this.chatHistoriesView?.includes(x)
+          ),
+        ];
+        missing = missing.reverse();
+        if (missing.length !== 0) {
+          for (let i = 0; i < ALLOW_MESSAGES; i++) {
+            //console.log('missing', missing[i]);
+            if (typeof missing[i] !== 'undefined') {
+              this.chatHistoriesView.push(missing[i]);
+            }
+          }
+        }
+        //console.log('this.chatHistoriesView', this.chatHistoriesView);
+      }
+     event.target.complete();
+    }, 200);
+  }
+
+  logScrollStart(event) {
+    // console.log("logScrollStart : When Scroll Starts", event);
+  }
+
+  logScrolling(event) {
+    if (event.detail.scrollTop <= 100) {
+      this.firstLoad = false;
+    }
+    // console.log('logScrolling : When Scrolling', event);
+    // console.log('deltaY : deltaY', event.detail.deltaY);
+    //reach top of page
+    // if (event.detail.scrollTop <= 100 && this.lock
+    //   ) {
+    //   this.lock = false;
+    // setTimeout(() => {
+    // this.numberMessages = this.numberMessages + ALLOW_MESSAGES;
+    // this.chatHistoriesView = this.chatService.chatHistories.slice(
+    //   this.numberMessages * -1
+    // );
+    //  this.lock = true;
+    //  this.infiniteScroll.disabled = false;
+    // this.content.scrollToPoint(0, NUM_PIXEL);
+    // console.log('number of messages ',  this.numberMessages);
+    // console.log('ADD MORE DATA');
+    // }, 500);
+    // }
+  }
+
+  logScrollEnd(event) {
+    this.infiniteScroll.disabled = false;
+    // console.log('logScrollEnd : When Scroll Ends', event);
   }
 
   public animateButton(chahHistoryId: string) {
