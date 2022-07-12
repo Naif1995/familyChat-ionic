@@ -74,6 +74,7 @@ export class ChatRoomPage implements OnInit {
   chatHistoriesView: ChatHistories[];
   lock = true;
   numberMessages = 0;
+  missing: ChatHistories[] =[];
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
@@ -225,68 +226,41 @@ export class ChatRoomPage implements OnInit {
       this.fileService.saveImage(image);
     }
   }
-  loadData(event) {
-    let minChatHistoriesId = 0;
+  async loadData(event) {
     setTimeout(() => {
       if (!this.firstLoad) {
         this.numberMessages = this.numberMessages + ALLOW_MESSAGES;
         const chatHistoriesViewTemp: ChatHistories[] =
-          this.chatService.chatHistories.slice(this.numberMessages * -1);
-        //get min ID in list to avoid dublication
-        minChatHistoriesId = Math.min(
-          ...chatHistoriesViewTemp.map((o) => parseInt(o.chatHistoryId))
-        );
-        let missing: ChatHistories[] = [
-          ...chatHistoriesViewTemp.filter(
+          this.chatService?.chatHistories?.slice(this.numberMessages * -1);
+         this.missing =
+          chatHistoriesViewTemp?.filter(
             (x) => !this.chatHistoriesView?.includes(x)
-          ),
-        ];
-        missing = missing.reverse();
-        if (missing.length !== 0) {
+          );
+        this.missing = this.missing?.reverse();
+        if (this.missing?.length !== 0) {
           for (let i = 0; i < ALLOW_MESSAGES; i++) {
-            //console.log('missing', missing[i]);
-            if (typeof missing[i] !== 'undefined') {
-              this.chatHistoriesView.push(missing[i]);
+            console.log('missing', this.missing);
+            if (typeof this.missing[i] !== 'undefined') {
+              this.chatHistoriesView?.push(this.missing[i]);
             }
           }
         }
-        //console.log('this.chatHistoriesView', this.chatHistoriesView);
       }
      event.target.complete();
-    }, 200);
+    }, 1000);
   }
 
   logScrollStart(event) {
-    // console.log("logScrollStart : When Scroll Starts", event);
   }
 
   logScrolling(event) {
     if (event.detail.scrollTop <= 100) {
       this.firstLoad = false;
     }
-    // console.log('logScrolling : When Scrolling', event);
-    // console.log('deltaY : deltaY', event.detail.deltaY);
-    //reach top of page
-    // if (event.detail.scrollTop <= 100 && this.lock
-    //   ) {
-    //   this.lock = false;
-    // setTimeout(() => {
-    // this.numberMessages = this.numberMessages + ALLOW_MESSAGES;
-    // this.chatHistoriesView = this.chatService.chatHistories.slice(
-    //   this.numberMessages * -1
-    // );
-    //  this.lock = true;
-    //  this.infiniteScroll.disabled = false;
-    // this.content.scrollToPoint(0, NUM_PIXEL);
-    // console.log('number of messages ',  this.numberMessages);
-    // console.log('ADD MORE DATA');
-    // }, 500);
-    // }
   }
 
   logScrollEnd(event) {
     this.infiniteScroll.disabled = false;
-    // console.log('logScrollEnd : When Scroll Ends', event);
   }
 
   public animateButton(chahHistoryId: string) {

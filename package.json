@@ -49,6 +49,7 @@
     "cordova-plugin-vibration": "^3.1.1",
     "firebase": "^9.6.1",
     "ngx-autosize": "^1.8.7",
+    "ngx-infinite-scroll": "^13.0.0",
     "rxjs": "~6.6.0",
     "save": "^2.4.0",
     "sockjs": "^0.3.24",

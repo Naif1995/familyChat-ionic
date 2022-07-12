@@ -17,6 +17,7 @@ import { AutosizeModule } from 'ngx-autosize';
 import { Vibration } from '@awesome-cordova-plugins/vibration/ngx';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { Dialogs } from '@awesome-cordova-plugins/dialogs/ngx';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // import { StorageService } from 'ngx-webstorage-service';
 
@@ -27,7 +28,7 @@ import { Dialogs } from '@awesome-cordova-plugins/dialogs/ngx';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule,     IonicStorageModule.forRoot(), BrowserAnimationsModule
-  ,MatNativeDateModule, CommonModule, HttpClientModule,AutosizeModule, ScrollingModule],
+  ,MatNativeDateModule, CommonModule, HttpClientModule,AutosizeModule, ScrollingModule,InfiniteScrollModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     Vibration, ScrollingModule, Dialogs],
