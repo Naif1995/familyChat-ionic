@@ -9,7 +9,7 @@ import { ChatRoomPageRoutingModule } from './chat-room-routing.module';
 import { ChatRoomPage } from './chat-room.page';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
-import {ScrollingModule} from '@angular/cdk/scrolling';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   imports: [
@@ -20,7 +20,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     ReactiveFormsModule,
     HttpClientModule,
     MatDialogModule,
-    ScrollingModule
+    InfiniteScrollModule
   ],
   declarations: [ChatRoomPage]
 })

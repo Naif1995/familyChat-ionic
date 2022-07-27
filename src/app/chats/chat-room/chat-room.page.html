@@ -12,51 +12,39 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [scrollEvents]="true"
-(ionScrollStart)="logScrollStart($event)"
-(ionScroll)="logScrolling($event)"
-(ionScrollEnd)="logScrollEnd($event)">
+<ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <ion-grid>
+    <div #viewportRef   class="viewport" (scroll)="onScroll($event)">
+        <ion-row *ngFor="let message of chatHistoriesView">
+          <ion-col
+            *ngIf="message?.sendFrom === this.userService?.user?.name"
+            [id]="'chat_'+message.chatHistoryId"
+            [offset]="myoffSetSize(message.chatText)"
+            [size]="myRowSize(message.chatText)"
+            class="message my-message"
+          >
+            <b>{{message.sendFrom}}</b><br />
+            <span>{{message.chatText}}</span>
+            <span>{{message.chatHistoryId}}</span>
+            <div class="time" class="ion-text-right">
+              {{message.created | date: 'shortTime'}}
+            </div>
+          </ion-col>
 
-    <ion-infinite-scroll disabled="false"  threshold="120px" (ionInfinite)="loadData($event)" position="top" >
-      <ion-infinite-scroll-content
-        loadingSpinner="bubbles"
-        loadingText="Loading more data...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
-    <ion-row *ngFor="let message of chatHistoriesView?.reverse()">
-
-
-      <ion-col
-      *ngIf="message?.sendFrom === this.userService?.user?.name"
-        [id]="'chat_'+message.chatHistoryId"
-        [offset]="myoffSetSize(message.chatText)"
-        [size]="myRowSize(message.chatText)"
-        class="message my-message"
-      >
-
-        <b>{{message.sendFrom}}</b><br />
-        <span>{{message.chatText}}</span>
-        <span>{{message.chatHistoryId}}</span>
-        <div class="time" class="ion-text-right">
-          {{message.created | date: 'shortTime'}}
-        </div>
-      </ion-col>
-
-      <ion-col
-        [id]="'chat_'+message.chatHistoryId"
-        [size]="rowSize(message.chatText)"
-        class="message other-message"
-      >
-
-        <b>{{message.sendFrom}}</b><br />
-        <span>{{message.chatText}}</span>
-        <span>{{message.chatHistoryId}}</span>
-        <div class="time" class="ion-text-right">
-          {{message.created | date: 'shortTime'}}
-        </div>
-      </ion-col>
-    </ion-row>
+          <ion-col
+            [id]="'chat_'+message.chatHistoryId"
+            [size]="rowSize(message.chatText)"
+            class="message other-message"
+          >
+            <b>{{message.sendFrom}}</b><br />
+            <span>{{message.chatText}}</span>
+            <span>{{message.chatHistoryId}}</span>
+            <div class="time" class="ion-text-right">
+              {{message.created | date: 'shortTime'}}
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
   </ion-grid>
 </ion-content>
 

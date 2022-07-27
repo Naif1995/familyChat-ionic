@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/semi */
 /* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -8,23 +10,24 @@
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
 /* eslint-disable radix */
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   IterableDiffers,
   OnInit,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import {
   AlertController,
   AnimationController,
   IonContent,
-  IonInfiniteScroll,
   LoadingController,
   ModalController,
   NavController,
 } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 import { Chat } from '../chat';
 import { ChatService } from '../services/chat.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -37,7 +40,6 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileService } from '../services/file.service';
 import { map, tap } from 'rxjs/operators';
 import { Vibration } from '@awesome-cordova-plugins/vibration/ngx';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ChatRoomPhotoPage } from './chat-room-photo/chat-room-photo.page';
 import { ChatHistories } from '../conversation';
 import { UserService } from '../services/user.service';
@@ -58,11 +60,12 @@ interface LocalFile {
   styleUrls: ['./chat-room.page.scss'],
 })
 export class ChatRoomPage implements OnInit {
-  @ViewChild(IonInfiniteScroll, { static: false })
-  infiniteScroll: IonInfiniteScroll;
   @ViewChild(IonContent, { static: false }) content: IonContent;
-  @ViewChild(CdkVirtualScrollViewport, { static: false })
-  public virtualScrollViewport?: CdkVirtualScrollViewport;
+  @ViewChild('viewportRef')
+  public viewportRef!: ElementRef;
+  currentPosition = window.pageYOffset;
+  ScrollHeight;
+  scroll;
   chat: Chat;
   user: User;
   chatForm: FormGroup;
@@ -74,8 +77,15 @@ export class ChatRoomPage implements OnInit {
   chatHistoriesView: ChatHistories[];
   lock = true;
   numberMessages = 0;
-  missing: ChatHistories[] =[];
+  missing: ChatHistories[] = [];
+  footerHidden: boolean;
+  public lastScrollTop = 0;
+  public demoType: 'window' | 'container';
+
+  private changeDetectionRef: ChangeDetectorRef;
+
   constructor(
+    changeDetectionRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private navCtrl: NavController,
     public chatService: ChatService,
@@ -97,7 +107,25 @@ export class ChatRoomPage implements OnInit {
       chatText: [''],
     });
     this.differ = differs.find([]).create(null);
+    this.changeDetectionRef = changeDetectionRef;
   }
+
+  // @HostListener('window:scroll', ['$event.target']) // for window scroll events
+  // async scroll(e: { scrollingElement: { scrollTop: any } }) {
+  //   let scroll = e.scrollingElement.scrollTop;
+  //   console.log('this is the scroll position', scroll);
+  //   console.log('Height', this.getContainerScrollHeight());
+  //   if (scroll > this.currentPosition) {
+  //     console.log('scrollDown');
+  //   } else {
+  //     console.log('scrollUp');
+  //     // reach top of page
+  //     if (await this.getContainerScrollHeight() / scroll > 5) {
+  //       this.addNewsItem();
+  //     }
+  //   }
+  //   this.currentPosition = scroll;
+  // }
 
   ngDoCheck() {
     const change = this.differ.diff(this.chatService.chatHistories);
@@ -140,10 +168,8 @@ export class ChatRoomPage implements OnInit {
         tap((val) => {
           if (val) {
             this.chat = val;
-            this.chatHistoriesView = val.chatHistories.slice(
-              ALLOW_MESSAGES * -1
-            );
-            this.chatHistoriesView = this.chatHistoriesView.reverse();
+            this.chatHistoriesView = val.chatHistories.slice(16 * -1);
+            //this.chatHistoriesView = this.chatHistoriesView.reverse();
             this.chatService.chatHistories = val.chatHistories;
           }
         })
@@ -153,6 +179,28 @@ export class ChatRoomPage implements OnInit {
           this.content.scrollToBottom();
         }, 1);
       });
+  }
+  async onScroll(ev) {
+    this.getContainerScrollTop().then((e) => {
+      this.scroll = e;
+      console.log('this is the scroll position ', e);
+    });
+    this.getContainerScrollHeight().then((e) => {
+      //619 is addtional component since we are using ion content not ineer componenet
+      this.ScrollHeight = e - 619;
+      console.log('Height ', this.ScrollHeight);
+    });
+    if (this.scroll > this.currentPosition) {
+      console.log('scrollDown');
+    } else {
+      console.log('scrollUp');
+      // reach top of page
+      if (this.ScrollHeight / this.scroll > 5) {
+        this.addNewsItem();
+        console.log('addNewsItem');
+      }
+    }
+    this.currentPosition = this.scroll;
   }
 
   doVibrationFor() {
@@ -232,10 +280,9 @@ export class ChatRoomPage implements OnInit {
         this.numberMessages = this.numberMessages + ALLOW_MESSAGES;
         const chatHistoriesViewTemp: ChatHistories[] =
           this.chatService?.chatHistories?.slice(this.numberMessages * -1);
-         this.missing =
-          chatHistoriesViewTemp?.filter(
-            (x) => !this.chatHistoriesView?.includes(x)
-          );
+        this.missing = chatHistoriesViewTemp?.filter(
+          (x) => !this.chatHistoriesView?.includes(x)
+        );
         this.missing = this.missing?.reverse();
         if (this.missing?.length !== 0) {
           for (let i = 0; i < ALLOW_MESSAGES; i++) {
@@ -246,22 +293,108 @@ export class ChatRoomPage implements OnInit {
           }
         }
       }
-     event.target.complete();
+      event.target.complete();
     }, 1000);
   }
 
-  logScrollStart(event) {
+  // ---
+  // PUBLIC METHODS.
+  // ---
+
+  ngAfterViewInit(): void {
+    // for (let i = 0; i <= 20; i++) {
+    //   this.addNewsItem();
+    // }
   }
 
-  logScrolling(event) {
-    if (event.detail.scrollTop <= 100) {
-      this.firstLoad = false;
+  // ---
+  // PRIVATE METHODS.
+  // ---
+
+  // I add a new news item, using the abstracted DOM manipulation methods.
+  private async addNewsItem(): Promise<void> {
+    // NOTE: Depending on the type of demo, the constrained container is different.
+    // And, the different containers use slightly different DOM methods for getting
+    // and setting the current scroll heights and offsets. As such, the getters and
+    // setters have been abstracted into other private methods. That said, the
+    // algorithm is the same in both cases:
+    // --
+    // STEP 1: Get current scroll conditions.
+    // STEP 2: Add new content and force DOM reconciliation.
+    // STEP 3: Check new scroll conditions.
+    // STEP 4: Update scroll settings to account for new content.
+    // --
+
+    // STEP ONE: Get the current scroll conditions for the container.
+    var preScrollHeight = this.ScrollHeight;
+    var preScrollOffset = this.scroll;
+
+    // STEP TWO: Add the content that will change the scroll-height of the container.
+    this.numberMessages = this.numberMessages + ALLOW_MESSAGES;
+    const chatHistoriesViewTemp: ChatHistories[] =
+      this.chatService?.chatHistories?.slice(this.numberMessages * -1);
+    this.missing = chatHistoriesViewTemp?.filter(
+      (x) => !this.chatHistoriesView?.includes(x)
+    );
+    if (this.missing?.length !== 0) {
+      this.missing = this.missing.reverse();
+      for (let i = 0; i < ALLOW_MESSAGES; i++) {
+        console.log('missing', this.missing);
+        if (typeof this.missing[i] !== 'undefined') {
+          this.chatHistoriesView?.unshift(this.missing[i]);
+        }
+      }
     }
+
+    // Force Angular to reconcile the DOM with the View Model. This call tells
+    // Angular to trigger a change-detection so that our new news item will be
+    // rendered to the browser, allowing us to inspect the scroll changes.
+    this.changeDetectionRef.detectChanges();
+
+    // STEP THREE: Now that Angular has rendered the changes in the browser, we have
+    // to examine the state of the browser to see how the changes were handled.
+    var postScrollOffset = this.ScrollHeight;
+
+    // In modern Chrome and Firefox, the scroll-offset will be HANDLED AUTOMATICALLY.
+    // Meaning, Chrome and Firefox will UPDATE THE SCROLL OFFSET in order to maintain
+    // the "current" experience for the user (how great is that?!?!). However, Safari
+    // does not do this. As such, if the pre/post scroll offsets are the same, we
+    // have to step-in and manually SCROLL THE USER DOWN to compensate for the change
+    // in document height.
+//     if (
+//       preScrollOffset &&
+//       postScrollOffset &&
+//       preScrollOffset === await postScrollOffset // The browser did NOT help us.
+//  // The browser did NOT help us.
+//     ) {
+//       // STEP FOUR: The browser didn't adjust the scroll offset automatically. As
+//       // such, we have to step in and scroll the user down imperatively.
+//       var postScrollHeight = await this.getContainerScrollHeight();
+//       var deltaHeight = postScrollHeight - preScrollHeight;
+
+//       this.setScrollTop(await postScrollOffset, deltaHeight);
+
+//       console.warn('Scrolling by', deltaHeight, 'px');
+//     }
   }
 
-  logScrollEnd(event) {
-    this.infiniteScroll.disabled = false;
+  // I get the current scroll height of the container.
+  private async getContainerScrollHeight(): Promise<number> {
+    return (await this.content.getScrollElement()).scrollHeight;
   }
+
+  // I get the current scroll offset of the container.
+  private async getContainerScrollTop(): Promise<number> {
+    return (await this.content.getScrollElement()).scrollTop;
+  }
+
+
+  // I update the container to use the new scroll offset.
+  // private setScrollTop(currentScrollTop: number, delta: number): void {
+  //   this.viewportRef.nativeElement.scrollTop = currentScrollTop + delta;
+
+  //   window.scrollBy(0, delta);
+  // }
 
   public animateButton(chahHistoryId: string) {
     const animation = this.animationCtrl
