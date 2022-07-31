@@ -32,6 +32,7 @@
           </ion-col>
 
           <ion-col
+          *ngIf="message?.sendFrom !== this.userService?.user?.name"
             [id]="'chat_'+message.chatHistoryId"
             [size]="rowSize(message.chatText)"
             class="message other-message"

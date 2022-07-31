@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/semi */
@@ -10,6 +11,7 @@
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
 /* eslint-disable radix */
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -59,7 +61,7 @@ interface LocalFile {
   templateUrl: './chat-room.page.html',
   styleUrls: ['./chat-room.page.scss'],
 })
-export class ChatRoomPage implements OnInit {
+export class ChatRoomPage implements AfterViewInit, OnInit {
   @ViewChild(IonContent, { static: false }) content: IonContent;
   @ViewChild('viewportRef')
   public viewportRef!: ElementRef;
@@ -97,7 +99,7 @@ export class ChatRoomPage implements OnInit {
     private loadingCtrl: LoadingController,
     private fileService: FileService,
     private animationCtrl: AnimationController,
-    differs: IterableDiffers,
+    private differs: IterableDiffers,
     private vibration: Vibration,
     private modalCtrl: ModalController,
     //TODO when refresh page need get user date after lose it.
@@ -106,35 +108,31 @@ export class ChatRoomPage implements OnInit {
     this.chatForm = this.formBuilder.group({
       chatText: [''],
     });
-    this.differ = differs.find([]).create(null);
+
     this.changeDetectionRef = changeDetectionRef;
   }
 
-  // @HostListener('window:scroll', ['$event.target']) // for window scroll events
-  // async scroll(e: { scrollingElement: { scrollTop: any } }) {
-  //   let scroll = e.scrollingElement.scrollTop;
-  //   console.log('this is the scroll position', scroll);
-  //   console.log('Height', this.getContainerScrollHeight());
-  //   if (scroll > this.currentPosition) {
-  //     console.log('scrollDown');
-  //   } else {
-  //     console.log('scrollUp');
-  //     // reach top of page
-  //     if (await this.getContainerScrollHeight() / scroll > 5) {
-  //       this.addNewsItem();
-  //     }
-  //   }
-  //   this.currentPosition = scroll;
-  // }
-
   ngDoCheck() {
-    const change = this.differ.diff(this.chatService.chatHistories);
+    const change = this.differ?.diff(this.chatService.chatHistories);
     if (change) {
       console.log(change);
+      console.log(change._itTail);
+      let newIndex = change._itTail.currentIndex;
+      if (
+        this.chatHistoriesView[this.chatHistoriesView.length - 1] ===
+        this.chatService?.chatHistories[newIndex]
+      ) {
+        return;
+      }
+      this.chatHistoriesView?.push(this.chatService?.chatHistories[newIndex]);
       setTimeout(() => {
         this.content.scrollToBottom(100);
       }, 300);
     }
+  }
+
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit');
   }
 
   ionViewDidEnter() {
@@ -150,6 +148,9 @@ export class ChatRoomPage implements OnInit {
       this.content.scrollToBottom();
     }, 1);
     console.log('ionViewDidEnter');
+    setTimeout(() => {
+      this.differ = this.differs.find([]).create(null);
+    }, 300);
     // this.loadFiles();
   }
   ngOnInit() {}
@@ -169,8 +170,8 @@ export class ChatRoomPage implements OnInit {
           if (val) {
             this.chat = val;
             this.chatHistoriesView = val.chatHistories.slice(16 * -1);
-            //this.chatHistoriesView = this.chatHistoriesView.reverse();
             this.chatService.chatHistories = val.chatHistories;
+            console.log(this.chatHistoriesView);
           }
         })
       )
@@ -183,21 +184,16 @@ export class ChatRoomPage implements OnInit {
   async onScroll(ev) {
     this.getContainerScrollTop().then((e) => {
       this.scroll = e;
-      console.log('this is the scroll position ', e);
     });
     this.getContainerScrollHeight().then((e) => {
       //619 is addtional component since we are using ion content not ineer componenet
       this.ScrollHeight = e - 619;
-      console.log('Height ', this.ScrollHeight);
     });
     if (this.scroll > this.currentPosition) {
-      console.log('scrollDown');
     } else {
-      console.log('scrollUp');
       // reach top of page
       if (this.ScrollHeight / this.scroll > 5) {
         this.addNewsItem();
-        console.log('addNewsItem');
       }
     }
     this.currentPosition = this.scroll;
@@ -301,12 +297,6 @@ export class ChatRoomPage implements OnInit {
   // PUBLIC METHODS.
   // ---
 
-  ngAfterViewInit(): void {
-    // for (let i = 0; i <= 20; i++) {
-    //   this.addNewsItem();
-    // }
-  }
-
   // ---
   // PRIVATE METHODS.
   // ---
@@ -361,21 +351,21 @@ export class ChatRoomPage implements OnInit {
     // does not do this. As such, if the pre/post scroll offsets are the same, we
     // have to step-in and manually SCROLL THE USER DOWN to compensate for the change
     // in document height.
-//     if (
-//       preScrollOffset &&
-//       postScrollOffset &&
-//       preScrollOffset === await postScrollOffset // The browser did NOT help us.
-//  // The browser did NOT help us.
-//     ) {
-//       // STEP FOUR: The browser didn't adjust the scroll offset automatically. As
-//       // such, we have to step in and scroll the user down imperatively.
-//       var postScrollHeight = await this.getContainerScrollHeight();
-//       var deltaHeight = postScrollHeight - preScrollHeight;
+    //     if (
+    //       preScrollOffset &&
+    //       postScrollOffset &&
+    //       preScrollOffset === await postScrollOffset // The browser did NOT help us.
+    //  // The browser did NOT help us.
+    //     ) {
+    //       // STEP FOUR: The browser didn't adjust the scroll offset automatically. As
+    //       // such, we have to step in and scroll the user down imperatively.
+    //       var postScrollHeight = await this.getContainerScrollHeight();
+    //       var deltaHeight = postScrollHeight - preScrollHeight;
 
-//       this.setScrollTop(await postScrollOffset, deltaHeight);
+    //       this.setScrollTop(await postScrollOffset, deltaHeight);
 
-//       console.warn('Scrolling by', deltaHeight, 'px');
-//     }
+    //       console.warn('Scrolling by', deltaHeight, 'px');
+    //     }
   }
 
   // I get the current scroll height of the container.
@@ -387,7 +377,6 @@ export class ChatRoomPage implements OnInit {
   private async getContainerScrollTop(): Promise<number> {
     return (await this.content.getScrollElement()).scrollTop;
   }
-
 
   // I update the container to use the new scroll offset.
   // private setScrollTop(currentScrollTop: number, delta: number): void {

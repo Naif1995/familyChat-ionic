@@ -45,12 +45,12 @@ export class SocketService {
   }
 
   private connect(): Observable<any> {
-    console.log('before set state ');
+    //console.log('before set state ');
     return new Observable<Client>((observer) => {
       this.state
         .pipe(
           tap((val) => {
-            console.log('state ', val);
+            //console.log('state ', val);
           }),
           filter((state) => state === SocketClientState.CONNECTED)
         )
@@ -61,7 +61,7 @@ export class SocketService {
   }
 
   send(topic: string, payload: any): void {
-    console.log(this.connect());
+    //console.log(this.connect());
     this.connect()
       .pipe(first())
       .subscribe((client) => client.send(topic, {}, JSON.stringify(payload)));
